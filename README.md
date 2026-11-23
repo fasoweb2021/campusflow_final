@@ -24,3 +24,15 @@ campusflow/                      ← Racine du dépôt Git
 
 Pour le détail des choix architecturaux (Flutter, Riverpod, GoRouter, Dio, design system, sécurité), consultez [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+## Séance 3 — Modèles de données Dart (`campusflow_models`)
+
+Création du package Dart pur `campusflow_models` contenant les modèles immuables de l'application (`Task`, `Course`, `User`), la sérialisation JSON, et un dépôt simulé asynchrone pour les tests.
+
+Commandes de vérification du package :
+```bash
+cd campusflow_models
+dart analyze
+dart test
+```
+
+
