@@ -42,3 +42,4 @@ Future<void> main() async {
 
   print('\n=== Fin de la démonstration ===');
 }
+
