@@ -15,8 +15,8 @@ sans appel (fiche comparative, critère 12) : Android représente 92,72 % du par
 Burkina Faso et 83,03 % à l'échelle du continent, reléguant iOS à un rôle marginal (~7 %)
 réservé à une minorité aisée. Cette écrasante domination est confortée par le coût d'acquisition
 du matériel (critère 11) : le pouvoir d'achat étudiant oriente massivement les choix vers des
-smartphones d'entrée de gamme (Tecno, Infinix, Itel) vendus entre 30 000 et 60 000 FCFA,
-rendant l'écosystème Apple financièrement hors de portée. Pour autant, afin de ne pas exclure
+smartphones Android d'entrée de gamme (Tecno, Infinix, Itel), nettement moins chers
+qu'un iPhone, rendant l'écosystème Apple financièrement hors de portée. Pour autant, afin de ne pas exclure
 les détenteurs d'iPhone et pour éviter l'écueil d'un double développement natif coûteux et
 redondant (critères 3 et 10), l'approche retenue est le développement cross-platform avec Flutter.
 Ce choix s'appuie directement sur les leçons de l'autopsie de BlackBerry OS : la chute brutale
@@ -40,9 +40,9 @@ En application directe de cette décision, les choix de conception et de dévelo
    - Optimisation des gabarits d'écran pour les résolutions compactes (format de référence 360 × 800 dp), tout en assurant l'extensibilité sur écran large/tablette (seuil à 840 dp).
    - Niveau d'API minimal conservateur pour supporter les appareils plus anciens encore en circulation.
 
-2. **Mode hors-ligne partiel et résilience réseau** :
-   - La connectivité étant intermittente et la data mobile onéreuse en Afrique de l'Ouest, l'application ne doit jamais afficher un écran blanc ou bloquer la saisie en cas de perte de réseau.
-   - Les données des cours et échéances doivent être consultables localement, et les modifications enregistrées avec synchronisation asynchrone dès le rétablissement de la connexion.
+2. **Résilience réseau en v1 et vision hors-ligne v2** :
+   - La connectivité étant intermittente et la data mobile onéreuse en Afrique de l'Ouest, l'application doit gérer explicitement les coupures réseau dès la v1 : aucun écran blanc ni crash, affichage d'états clairs (indicateur de chargement, message d'erreur explicite et bouton « Réessayer » via invalidation du provider).
+   - Le stockage en cache local persistant et la saisie en mode hors-ligne intégral sont planifiés pour une future version (v2), la v1 se concentrant sur une communication robuste avec l'API REST.
 
 3. **Taille de l'application (Poids de l'APK)** :
    - Maîtrise rigoureuse de la taille du binaire final (APK) pour limiter la consommation du forfait data lors de l'installation.
