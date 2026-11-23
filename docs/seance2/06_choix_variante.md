@@ -32,8 +32,8 @@ Ce document évalue les trois variantes d'interface conçues pour l'écran princ
 
 ## 3. Décision finale de l'étudiant
 
-*(Section réservée à la validation humaine du développeur / étudiant)*
+**Variante retenue** : **Variante C (Cartes structurées avec indicateur de retard visuel)**
 
-**Variante retenue** : À compléter
+**Justification personnelle** :  
+Après analyse des trois maquettes, je choisis la **Variante C** car elle répond le plus efficacement aux angoisses de Moussa et à son parcours de consultation rapide identifié au TP05. Le contraste marqué des cartes, son badge d'urgence et son liseré latéral lui permettent d'isoler en un clin d'œil les devoirs en retard sans devoir relire tout son écran en plein soleil. J'écarte la **Variante A** car son affichage uniforme ne met aucunement en valeur les priorités critiques d'un étudiant débordé. Enfin, j'écarte la **Variante B** dont le regroupement temporel fractionné allonge inutilement le défilement et complexifie la gestion de l'état sans offrir la lisibilité directe de la variante C.
 
-**Justification personnelle** : À compléter
