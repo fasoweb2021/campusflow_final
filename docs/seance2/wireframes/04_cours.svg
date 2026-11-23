@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- En-tête AppBar -->
+  <rect y="24" width="360" height="56" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+  <text x="16" y="59" font-size="20" font-weight="bold" fill="#212529">Mes Cours</text>
+
+  <!-- Liste des cours -->
+  <!-- Cours 1 -->
+  <g transform="translate(16, 96)">
+    <rect width="328" height="96" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="16" y="16" width="40" height="40" rx="8" fill="#E9ECEF" />
+    <text x="36" y="41" font-size="20" text-anchor="middle">📱</text>
+    <text x="68" y="34" font-size="15" font-weight="bold" fill="#212529">Programmation Mobile</text>
+    <text x="68" y="54" font-size="12" fill="#6C757D">Dr. Ouédraogo • Labo Info 2</text>
+    <rect x="68" y="66" width="110" height="20" rx="10" fill="#E9ECEF" />
+    <text x="123" y="80" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">3 tâches en cours</text>
+  </g>
+
+  <!-- Cours 2 -->
+  <g transform="translate(16, 204)">
+    <rect width="328" height="96" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="16" y="16" width="40" height="40" rx="8" fill="#E9ECEF" />
+    <text x="36" y="41" font-size="20" text-anchor="middle">🧮</text>
+    <text x="68" y="34" font-size="15" font-weight="bold" fill="#212529">Algorithmique Avancée</text>
+    <text x="68" y="54" font-size="12" fill="#6C757D">Pr. Traoré • Amphi B</text>
+    <rect x="68" y="66" width="110" height="20" rx="10" fill="#E9ECEF" />
+    <text x="123" y="80" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">1 tâche en cours</text>
+  </g>
+
+  <!-- Cours 3 -->
+  <g transform="translate(16, 312)">
+    <rect width="328" height="96" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="16" y="16" width="40" height="40" rx="8" fill="#E9ECEF" />
+    <text x="36" y="41" font-size="20" text-anchor="middle">🌐</text>
+    <text x="68" y="34" font-size="15" font-weight="bold" fill="#212529">Réseaux &amp; Télécoms</text>
+    <text x="68" y="54" font-size="12" fill="#6C757D">Dr. Sanogo • Salle 104</text>
+    <rect x="68" y="66" width="110" height="20" rx="10" fill="#E9ECEF" />
+    <text x="123" y="80" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">2 tâches en cours</text>
+  </g>
+
+  <!-- Barre de navigation inférieure (NavigationBar) -->
+  <g transform="translate(0, 720)">
+    <rect width="360" height="80" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+    <!-- Destination 1 : Échéances -->
+    <text x="60" y="33" font-size="18" text-anchor="middle">📅</text>
+    <text x="60" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Échéances</text>
+    <!-- Destination 2 : Cours (Active) -->
+    <rect x="145" y="12" width="70" height="32" rx="16" fill="#E9ECEF" />
+    <text x="180" y="33" font-size="18" text-anchor="middle">📚</text>
+    <text x="180" y="60" font-size="11" font-weight="bold" fill="#212529" text-anchor="middle">Cours</text>
+    <!-- Destination 3 : Profil -->
+    <text x="300" y="33" font-size="18" text-anchor="middle">👤</text>
+    <text x="300" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Profil</text>
+  </g>
+</svg>

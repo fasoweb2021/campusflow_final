@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- Zone Brand / Logo -->
+  <g transform="translate(120, 110)">
+    <rect width="120" height="120" rx="24" fill="#E9ECEF" stroke="#CED4DA" stroke-dasharray="4" />
+    <text x="60" y="65" font-size="32" text-anchor="middle">🎓</text>
+    <text x="60" y="90" font-size="11" fill="#6C757D" text-anchor="middle">[ Logo 120dp ]</text>
+  </g>
+
+  <text x="180" y="260" font-size="24" font-weight="bold" fill="#212529" text-anchor="middle">CampusFlow</text>
+  <text x="180" y="284" font-size="13" fill="#6C757D" text-anchor="middle">Vos cours, vos échéances, sans stress</text>
+
+  <!-- Formulaire de connexion -->
+  <!-- Champ Email -->
+  <g transform="translate(24, 330)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Adresse e-mail universitaire</text>
+    <rect y="8" width="312" height="48" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <text x="16" y="38" font-size="14" fill="#212529">etudiant@campusflow.bf</text>
+  </g>
+
+  <!-- Champ Mot de passe -->
+  <g transform="translate(24, 410)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Mot de passe</text>
+    <rect y="8" width="312" height="48" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <text x="16" y="38" font-size="14" fill="#212529">••••••••••••</text>
+    <text x="280" y="38" font-size="16" fill="#6C757D">👁️</text>
+  </g>
+
+  <!-- Bouton Se connecter / Entrer -->
+  <g transform="translate(24, 490)">
+    <rect width="312" height="48" rx="12" fill="#212529" />
+    <text x="156" y="30" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Entrer dans CampusFlow</text>
+  </g>
+
+  <!-- Info compte de démonstration -->
+  <g transform="translate(24, 570)">
+    <rect width="312" height="60" rx="8" fill="#E9ECEF" />
+    <text x="16" y="24" font-size="11" font-weight="bold" fill="#495057">Compte de test (démo) :</text>
+    <text x="16" y="44" font-size="11" fill="#6C757D">etudiant@campusflow.bf / campus2026</text>
+  </g>
+
+  <text x="180" y="760" font-size="11" fill="#ADB5BD" text-anchor="middle">CampusFlow v1.0 • Université Joseph Ki-Zerbo</text>
+</svg>

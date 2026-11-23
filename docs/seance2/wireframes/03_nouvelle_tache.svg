@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- En-tête AppBar avec bouton retour -->
+  <rect y="24" width="360" height="56" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+  <text x="20" y="58" font-size="20" fill="#212529">←</text>
+  <text x="56" y="59" font-size="18" font-weight="bold" fill="#212529">Nouvelle tâche</text>
+
+  <!-- Formulaire de saisie -->
+  <!-- Champ 1 : Titre -->
+  <g transform="translate(16, 100)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Titre de la tâche *</text>
+    <rect y="8" width="328" height="48" rx="12" fill="#FFFFFF" stroke="#6C757D" stroke-width="1.5" />
+    <text x="16" y="38" font-size="14" fill="#212529">TP Réseaux - Configuration VLAN</text>
+  </g>
+
+  <!-- Champ 2 : Cours (Dropdown) -->
+  <g transform="translate(16, 180)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Cours associé</text>
+    <rect y="8" width="328" height="48" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <text x="16" y="38" font-size="14" fill="#212529">Réseaux &amp; Télécoms</text>
+    <text x="300" y="38" font-size="14" fill="#6C757D">▼</text>
+  </g>
+
+  <!-- Champ 3 : Date d'échéance (DatePicker) -->
+  <g transform="translate(16, 260)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Date d'échéance *</text>
+    <rect y="8" width="328" height="48" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <text x="16" y="38" font-size="14" fill="#212529">Vendredi 28 novembre 2026</text>
+    <text x="296" y="38" font-size="16">📅</text>
+  </g>
+
+  <!-- Champ 4 : Description (multiligne) -->
+  <g transform="translate(16, 340)">
+    <text x="4" y="0" font-size="12" font-weight="bold" fill="#495057">Description (optionnelle)</text>
+    <rect y="8" width="328" height="110" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <text x="16" y="36" font-size="13" fill="#6C757D">Détails, consignes du professeur ou liens...</text>
+  </g>
+
+  <!-- Bouton d'action FilledButton (Enregistrer) -->
+  <g transform="translate(16, 480)">
+    <rect width="328" height="48" rx="12" fill="#212529" />
+    <text x="164" y="30" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Enregistrer la tâche</text>
+  </g>
+
+  <!-- Bouton Annuler -->
+  <g transform="translate(16, 540)">
+    <rect width="328" height="48" rx="12" fill="#FFFFFF" stroke="#CED4DA" stroke-width="1" />
+    <text x="164" y="30" font-size="14" font-weight="bold" fill="#6C757D" text-anchor="middle">Annuler</text>
+  </g>
+</svg>

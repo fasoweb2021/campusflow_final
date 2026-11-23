@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond d'écran du téléphone -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut (haut) -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- En-tête AppBar -->
+  <rect y="24" width="360" height="56" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+  <text x="16" y="59" font-size="20" font-weight="bold" fill="#212529">Échéances</text>
+
+  <!-- Filtres (Segmented Button) -->
+  <g transform="translate(16, 92)">
+    <rect width="328" height="40" rx="20" fill="#E9ECEF" stroke="#CED4DA" />
+    <rect x="2" y="2" width="106" height="36" rx="18" fill="#495057" />
+    <text x="55" y="24" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">À faire (5)</text>
+    <text x="164" y="24" font-size="12" fill="#495057" text-anchor="middle">Faites (3)</text>
+    <text x="273" y="24" font-size="12" fill="#495057" text-anchor="middle">En retard (2)</text>
+  </g>
+
+  <!-- Liste des tâches -->
+  <!-- Tâche 1 : En retard -->
+  <g transform="translate(16, 148)">
+    <rect width="328" height="72" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="14" y="24" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+    <text x="50" y="34" font-size="14" font-weight="bold" fill="#212529">Projet Mobile - TP06 Wireframes</text>
+    <text x="50" y="54" font-size="12" fill="#6C757D">Dév Mobile • </text>
+    <text x="120" y="54" font-size="12" font-weight="bold" fill="#343A40">⚠️ Hier, 23:59 (En retard)</text>
+  </g>
+
+  <!-- Tâche 2 -->
+  <g transform="translate(16, 230)">
+    <rect width="328" height="72" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="14" y="24" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+    <text x="50" y="34" font-size="14" font-weight="bold" fill="#212529">Rapport d'Algorithmique avancée</text>
+    <text x="50" y="54" font-size="12" fill="#6C757D">Algorithmique • 25 nov. 2026</text>
+  </g>
+
+  <!-- Tâche 3 -->
+  <g transform="translate(16, 312)">
+    <rect width="328" height="72" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect x="14" y="24" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+    <text x="50" y="34" font-size="14" font-weight="bold" fill="#212529">Préparation exposé Réseau</text>
+    <text x="50" y="54" font-size="12" fill="#6C757D">Réseaux &amp; Télécoms • 28 nov. 2026</text>
+  </g>
+
+  <!-- Tâche 4 : Faite -->
+  <g transform="translate(16, 394)">
+    <rect width="328" height="72" rx="12" fill="#F8F9FA" stroke="#E9ECEF" />
+    <rect x="14" y="24" width="24" height="24" rx="4" fill="#495057" />
+    <path d="M19 36 L24 41 L33 30" stroke="#FFFFFF" stroke-width="2" fill="none" />
+    <text x="50" y="34" font-size="14" fill="#ADB5BD" text-decoration="line-through">Fiche comparative Android/iOS</text>
+    <text x="50" y="54" font-size="12" fill="#ADB5BD">Dév Mobile • Fait le 23 nov.</text>
+  </g>
+
+  <!-- Bouton d'action flottant FAB (+) -->
+  <g transform="translate(284, 644)">
+    <circle cx="28" cy="28" r="28" fill="#343A40" />
+    <text x="28" y="36" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">+</text>
+  </g>
+
+  <!-- Barre de navigation inférieure (NavigationBar) -->
+  <g transform="translate(0, 720)">
+    <rect width="360" height="80" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+    <!-- Destination 1 : Échéances (Active) -->
+    <rect x="25" y="12" width="70" height="32" rx="16" fill="#E9ECEF" />
+    <text x="60" y="33" font-size="18" text-anchor="middle">📅</text>
+    <text x="60" y="60" font-size="11" font-weight="bold" fill="#212529" text-anchor="middle">Échéances</text>
+    <!-- Destination 2 : Cours -->
+    <text x="180" y="33" font-size="18" text-anchor="middle">📚</text>
+    <text x="180" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Cours</text>
+    <!-- Destination 3 : Profil -->
+    <text x="300" y="33" font-size="18" text-anchor="middle">👤</text>
+    <text x="300" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Profil</text>
+  </g>
+</svg>

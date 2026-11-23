@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- En-tête AppBar -->
+  <rect y="24" width="360" height="56" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+  <text x="16" y="59" font-size="20" font-weight="bold" fill="#212529">Échéances (Variante A)</text>
+  <text x="344" y="59" font-size="11" fill="#6C757D" text-anchor="end">Liste simple</text>
+
+  <!-- Filtres simples -->
+  <g transform="translate(16, 92)">
+    <rect width="328" height="36" rx="18" fill="#E9ECEF" />
+    <rect x="2" y="2" width="106" height="32" rx="16" fill="#495057" />
+    <text x="55" y="22" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">À faire</text>
+    <text x="164" y="22" font-size="12" fill="#495057" text-anchor="middle">Faites</text>
+    <text x="273" y="22" font-size="12" fill="#495057" text-anchor="middle">En retard</text>
+  </g>
+
+  <!-- Liste simple continue (ListTile standard sans fioritures) -->
+  <g transform="translate(16, 144)">
+    <!-- Ligne 1 -->
+    <rect width="328" height="60" fill="#FFFFFF" stroke="#DEE2E6" rx="8" />
+    <circle cx="24" cy="30" r="10" fill="none" stroke="#6C757D" stroke-width="2" />
+    <text x="46" y="28" font-size="13" font-weight="bold" fill="#212529">Projet Mobile - TP06 Wireframes</text>
+    <text x="46" y="46" font-size="11" fill="#6C757D">Dév Mobile • 23 nov. 2026</text>
+  </g>
+
+  <g transform="translate(16, 212)">
+    <!-- Ligne 2 -->
+    <rect width="328" height="60" fill="#FFFFFF" stroke="#DEE2E6" rx="8" />
+    <circle cx="24" cy="30" r="10" fill="none" stroke="#6C757D" stroke-width="2" />
+    <text x="46" y="28" font-size="13" font-weight="bold" fill="#212529">Rapport d'Algorithmique avancée</text>
+    <text x="46" y="46" font-size="11" fill="#6C757D">Algorithmique • 25 nov. 2026</text>
+  </g>
+
+  <g transform="translate(16, 280)">
+    <!-- Ligne 3 -->
+    <rect width="328" height="60" fill="#FFFFFF" stroke="#DEE2E6" rx="8" />
+    <circle cx="24" cy="30" r="10" fill="none" stroke="#6C757D" stroke-width="2" />
+    <text x="46" y="28" font-size="13" font-weight="bold" fill="#212529">Préparation exposé Réseau</text>
+    <text x="46" y="46" font-size="11" fill="#6C757D">Réseaux &amp; Télécoms • 28 nov. 2026</text>
+  </g>
+
+  <g transform="translate(16, 348)">
+    <!-- Ligne 4 -->
+    <rect width="328" height="60" fill="#FFFFFF" stroke="#DEE2E6" rx="8" />
+    <circle cx="24" cy="30" r="10" fill="none" stroke="#6C757D" stroke-width="2" />
+    <text x="46" y="28" font-size="13" font-weight="bold" fill="#212529">Exercice SQL Jointures</text>
+    <text x="46" y="46" font-size="11" fill="#6C757D">Bases de données • 30 nov. 2026</text>
+  </g>
+
+  <g transform="translate(16, 416)">
+    <!-- Ligne 5 -->
+    <rect width="328" height="60" fill="#FFFFFF" stroke="#DEE2E6" rx="8" />
+    <circle cx="24" cy="30" r="10" fill="none" stroke="#6C757D" stroke-width="2" />
+    <text x="46" y="28" font-size="13" font-weight="bold" fill="#212529">Quiz d'anglais technique</text>
+    <text x="46" y="46" font-size="11" fill="#6C757D">Anglais • 02 déc. 2026</text>
+  </g>
+
+  <!-- FAB -->
+  <g transform="translate(284, 644)">
+    <circle cx="28" cy="28" r="28" fill="#343A40" />
+    <text x="28" y="36" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">+</text>
+  </g>
+
+  <!-- NavigationBar -->
+  <g transform="translate(0, 720)">
+    <rect width="360" height="80" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+    <text x="60" y="33" font-size="18" text-anchor="middle">📅</text>
+    <text x="60" y="60" font-size="11" font-weight="bold" fill="#212529" text-anchor="middle">Échéances</text>
+    <text x="180" y="33" font-size="18" text-anchor="middle">📚</text>
+    <text x="180" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Cours</text>
+    <text x="300" y="33" font-size="18" text-anchor="middle">👤</text>
+    <text x="300" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Profil</text>
+  </g>
+</svg>

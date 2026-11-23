@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="800" viewBox="0 0 360 800" font-family="system-ui, sans-serif">
+  <!-- Fond -->
+  <rect width="360" height="800" fill="#F8F9FA" />
+
+  <!-- Barre de statut -->
+  <rect width="360" height="24" fill="#E9ECEF" />
+  <text x="16" y="17" font-size="12" font-weight="bold" fill="#495057">08:30</text>
+  <text x="310" y="17" font-size="11" fill="#495057">4G ■ 85%</text>
+
+  <!-- En-tête AppBar -->
+  <rect y="24" width="360" height="56" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+  <text x="16" y="59" font-size="20" font-weight="bold" fill="#212529">Échéances (Variante C)</text>
+  <text x="344" y="59" font-size="11" fill="#6C757D" text-anchor="end">Cartes &amp; Retard</text>
+
+  <!-- Filtres (Segmented Button avec badges compteurs) -->
+  <g transform="translate(16, 92)">
+    <rect width="328" height="40" rx="20" fill="#E9ECEF" stroke="#CED4DA" />
+    <rect x="2" y="2" width="106" height="36" rx="18" fill="#343A40" />
+    <text x="55" y="24" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">À faire (5)</text>
+    <text x="164" y="24" font-size="12" fill="#495057" text-anchor="middle">Faites (3)</text>
+    <text x="273" y="24" font-size="12" fill="#495057" text-anchor="middle">En retard (2)</text>
+  </g>
+
+  <!-- Carte 1 : EN RETARD avec liseré contrasté à gauche -->
+  <g transform="translate(16, 148)">
+    <rect width="328" height="84" rx="12" fill="#FFFFFF" stroke="#495057" stroke-width="1.5" />
+    <!-- Bandeau indicateur de retard à gauche -->
+    <rect width="8" height="84" rx="4" fill="#212529" />
+    <!-- Case à cocher -->
+    <rect x="20" y="30" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#495057" stroke-width="2" />
+    <!-- Titre et infos -->
+    <text x="56" y="32" font-size="14" font-weight="bold" fill="#212529">Projet Mobile - TP06 Wireframes</text>
+    <rect x="56" y="44" width="76" height="18" rx="9" fill="#E9ECEF" />
+    <text x="94" y="57" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">Dév Mobile</text>
+    <!-- Alerte de retard contrastée -->
+    <rect x="140" y="44" width="130" height="18" rx="9" fill="#212529" />
+    <text x="205" y="57" font-size="10" font-weight="bold" fill="#FFFFFF" text-anchor="middle">⚠️ HIER (EN RETARD)</text>
+    <text x="56" y="76" font-size="11" fill="#6C757D">Rendu : Dimanche 23 nov. à 23:59</text>
+  </g>
+
+  <!-- Carte 2 : Tâche standard à venir -->
+  <g transform="translate(16, 244)">
+    <rect width="328" height="84" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect width="6" height="84" rx="3" fill="#ADB5BD" />
+    <rect x="20" y="30" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+    <text x="56" y="32" font-size="14" font-weight="bold" fill="#212529">Rapport d'Algorithmique avancée</text>
+    <rect x="56" y="44" width="90" height="18" rx="9" fill="#E9ECEF" />
+    <text x="101" y="57" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">Algorithmique</text>
+    <text x="156" y="57" font-size="11" fill="#495057">Dans 2 jours</text>
+    <text x="56" y="76" font-size="11" fill="#6C757D">Rendu : Mercredi 25 nov. à 18:00</text>
+  </g>
+
+  <!-- Carte 3 : Tâche suivante -->
+  <g transform="translate(16, 340)">
+    <rect width="328" height="84" rx="12" fill="#FFFFFF" stroke="#CED4DA" />
+    <rect width="6" height="84" rx="3" fill="#ADB5BD" />
+    <rect x="20" y="30" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+    <text x="56" y="32" font-size="14" font-weight="bold" fill="#212529">Préparation exposé Réseau</text>
+    <rect x="56" y="44" width="115" height="18" rx="9" fill="#E9ECEF" />
+    <text x="113" y="57" font-size="10" font-weight="bold" fill="#495057" text-anchor="middle">Réseaux &amp; Télécoms</text>
+    <text x="56" y="76" font-size="11" fill="#6C757D">Rendu : Samedi 28 nov. à 12:00</text>
+  </g>
+
+  <!-- FAB -->
+  <g transform="translate(284, 644)">
+    <circle cx="28" cy="28" r="28" fill="#343A40" />
+    <text x="28" y="36" font-size="28" font-weight="bold" fill="#FFFFFF" text-anchor="middle">+</text>
+  </g>
+
+  <!-- NavigationBar -->
+  <g transform="translate(0, 720)">
+    <rect width="360" height="80" fill="#FFFFFF" stroke="#DEE2E6" stroke-width="1" />
+    <rect x="25" y="12" width="70" height="32" rx="16" fill="#E9ECEF" />
+    <text x="60" y="33" font-size="18" text-anchor="middle">📅</text>
+    <text x="60" y="60" font-size="11" font-weight="bold" fill="#212529" text-anchor="middle">Échéances</text>
+    <text x="180" y="33" font-size="18" text-anchor="middle">📚</text>
+    <text x="180" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Cours</text>
+    <text x="300" y="33" font-size="18" text-anchor="middle">👤</text>
+    <text x="300" y="60" font-size="11" fill="#6C757D" text-anchor="middle">Profil</text>
+  </g>
+</svg>
