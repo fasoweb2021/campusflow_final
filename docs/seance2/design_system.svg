@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1260" viewBox="0 0 900 1260" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <!-- Fond global du Design System -->
+  <rect width="900" height="1260" fill="#FAFAF7" />
+
+  <!-- En-tête de la planche -->
+  <g transform="translate(48, 48)">
+    <text x="0" y="32" font-size="28" font-weight="bold" fill="#1C1B1F">CampusFlow — Design System v1</text>
+    <text x="0" y="58" font-size="14" fill="#4A4F4C">Palette officielle, échelle typographique et composants interactifs (Conforme WCAG 2.1 AA &amp; Material 3)</text>
+    <line x1="0" y1="76" x2="804" y2="76" stroke="#E0E0DC" stroke-width="1.5" />
+  </g>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1 : PALETTE DE COULEURS & CONTRASTES -->
+  <!-- ========================================== -->
+  <g transform="translate(48, 150)">
+    <text x="0" y="0" font-size="18" font-weight="bold" fill="#1C1B1F">1. Palette de couleurs &amp; Contrastes vérifiés</text>
+
+    <!-- Pastille 1 : primary -->
+    <g transform="translate(0, 20)">
+      <rect width="120" height="70" rx="12" fill="#0B6E4F" />
+      <text x="60" y="32" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">primary</text>
+      <text x="60" y="52" font-size="11" fill="#FFFFFF" text-anchor="middle">#0B6E4F</text>
+      <text x="60" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">sur blanc: 6,25:1 ✅</text>
+    </g>
+
+    <!-- Pastille 2 : secondary -->
+    <g transform="translate(136, 20)">
+      <rect width="120" height="70" rx="12" fill="#F2A541" />
+      <text x="60" y="32" font-size="12" font-weight="bold" fill="#1C1B1F" text-anchor="middle">secondary</text>
+      <text x="60" y="52" font-size="11" fill="#1C1B1F" text-anchor="middle">#F2A541</text>
+      <text x="60" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">sur noir: 8,35:1 ✅</text>
+    </g>
+
+    <!-- Pastille 3 : primaryContainer -->
+    <g transform="translate(272, 20)">
+      <rect width="120" height="70" rx="12" fill="#D8EFE5" stroke="#B0DDCB" />
+      <text x="60" y="30" font-size="11" font-weight="bold" fill="#1C1B1F" text-anchor="middle">primaryContainer</text>
+      <text x="60" y="50" font-size="11" fill="#1C1B1F" text-anchor="middle">#D8EFE5</text>
+      <text x="60" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">sur noir: 14,19:1 ✅</text>
+    </g>
+
+    <!-- Pastille 4 : error -->
+    <g transform="translate(408, 20)">
+      <rect width="120" height="70" rx="12" fill="#B3261E" />
+      <text x="60" y="32" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">error</text>
+      <text x="60" y="52" font-size="11" fill="#FFFFFF" text-anchor="middle">#B3261E</text>
+      <text x="60" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">sur blanc: 6,54:1 ✅</text>
+    </g>
+
+    <!-- Pastille 5 : surface -->
+    <g transform="translate(544, 20)">
+      <rect width="120" height="70" rx="12" fill="#FAFAF7" stroke="#CED4DA" />
+      <text x="60" y="32" font-size="12" font-weight="bold" fill="#1C1B1F" text-anchor="middle">surface</text>
+      <text x="60" y="52" font-size="11" fill="#4A4F4C" text-anchor="middle">#FAFAF7</text>
+      <text x="60" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">Fond neutre</text>
+    </g>
+
+    <!-- Pastille 6 : onSurface -->
+    <g transform="translate(680, 20)">
+      <rect width="124" height="70" rx="12" fill="#1C1B1F" />
+      <text x="62" y="32" font-size="12" font-weight="bold" fill="#FFFFFF" text-anchor="middle">onSurface</text>
+      <text x="62" y="52" font-size="11" fill="#FFFFFF" text-anchor="middle">#1C1B1F</text>
+      <text x="62" y="90" font-size="10" fill="#4A4F4C" text-anchor="middle">Texte: 16,38:1 ✅</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- SECTION 2 : ÉCHELLE TYPOGRAPHIQUE          -->
+  <!-- ========================================== -->
+  <g transform="translate(48, 290)">
+    <text x="0" y="0" font-size="18" font-weight="bold" fill="#1C1B1F">2. Échelle Typographique (Roboto / Système)</text>
+
+    <g transform="translate(0, 20)">
+      <rect width="804" height="150" rx="12" fill="#FFFFFF" stroke="#E0E0DC" />
+      
+      <!-- headlineSmall -->
+      <text x="24" y="34" font-size="24" font-weight="600" fill="#1C1B1F">headlineSmall (24sp / w600) — Titres d'écran CampusFlow</text>
+      
+      <!-- titleMedium -->
+      <text x="24" y="66" font-size="16" font-weight="600" fill="#1C1B1F">titleMedium (16sp / w600) — TP06 Wireframes &amp; Titre de devoir</text>
+      
+      <!-- bodyMedium -->
+      <text x="24" y="94" font-size="14" font-weight="400" fill="#1C1B1F">bodyMedium (14sp / w400) — Texte courant pour les descriptions de cours et consignes de travail.</text>
+      
+      <!-- labelLarge -->
+      <text x="24" y="122" font-size="14" font-weight="600" fill="#0B6E4F">labelLarge (14sp / w600) — BOUTONS D'ACTION ET ONGLETS</text>
+      
+      <!-- bodySmall -->
+      <text x="560" y="122" font-size="12" font-weight="400" fill="#4A4F4C">bodySmall (12sp / w400) — Dates &amp; métadonnées</text>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3 : COMPOSANTS CLÉS & LEURS ÉTATS  -->
+  <!-- ========================================== -->
+  <g transform="translate(48, 490)">
+    <text x="0" y="0" font-size="18" font-weight="bold" fill="#1C1B1F">3. Composants Clés &amp; Leurs États (Normal • Désactivé • Erreur)</text>
+
+    <!-- SOUS-SECTION 3.1 : BOUTONS PRINCIPAUX -->
+    <g transform="translate(0, 25)">
+      <text x="0" y="0" font-size="14" font-weight="bold" fill="#4A4F4C">3.1. Bouton Principal (FilledButton — Hauteur 48 dp, Coins 12 dp)</text>
+      
+      <!-- État Normal -->
+      <g transform="translate(0, 14)">
+        <rect width="250" height="48" rx="12" fill="#0B6E4F" />
+        <text x="125" y="29" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Enregistrer (Normal)</text>
+      </g>
+
+      <!-- État Désactivé -->
+      <g transform="translate(276, 14)">
+        <rect width="250" height="48" rx="12" fill="#E4E4E2" />
+        <text x="125" y="29" font-size="14" font-weight="bold" fill="#A8A8A6" text-anchor="middle">Enregistrer (Désactivé)</text>
+      </g>
+
+      <!-- État Erreur / Destructif -->
+      <g transform="translate(552, 14)">
+        <rect width="252" height="48" rx="12" fill="#B3261E" />
+        <text x="126" y="29" font-size="14" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Supprimer (Erreur)</text>
+      </g>
+    </g>
+
+    <!-- SOUS-SECTION 3.2 : CARTE DE TÂCHE (VARIANTE C) -->
+    <g transform="translate(0, 125)">
+      <text x="0" y="0" font-size="14" font-weight="bold" fill="#4A4F4C">3.2. Carte de Tâche (Variante C retenue — Indicateur de Retard Visuel)</text>
+
+      <!-- État Normal (Dans les délais) -->
+      <g transform="translate(0, 14)">
+        <rect width="804" height="80" rx="12" fill="#FFFFFF" stroke="#CED4DA" stroke-width="1" />
+        <rect width="8" height="80" rx="4" fill="#ADB5BD" />
+        <rect x="24" y="28" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#6C757D" stroke-width="2" />
+        <text x="64" y="32" font-size="15" font-weight="600" fill="#1C1B1F">Rapport d'Algorithmique avancée (État Normal - À faire)</text>
+        <rect x="64" y="44" width="80" height="20" rx="10" fill="#E9ECEF" />
+        <text x="104" y="58" font-size="11" font-weight="600" fill="#4A4F4C" text-anchor="middle">Algorithmique</text>
+        <text x="156" y="58" font-size="12" fill="#4A4F4C">📅 Échéance : Mercredi 25 nov. 2026 à 18:00</text>
+      </g>
+
+      <!-- État Fait (Achevé / Désactivé) -->
+      <g transform="translate(0, 106)">
+        <rect width="804" height="80" rx="12" fill="#F8F9FA" stroke="#E9ECEF" stroke-width="1" />
+        <rect width="8" height="80" rx="4" fill="#E9ECEF" />
+        <rect x="24" y="28" width="24" height="24" rx="4" fill="#0B6E4F" />
+        <path d="M29 40 L34 45 L43 34" stroke="#FFFFFF" stroke-width="2.5" fill="none" />
+        <text x="64" y="32" font-size="15" fill="#A8A8A6" text-decoration="line-through">Fiche comparative Android/iOS (État Fait - Terminé)</text>
+        <rect x="64" y="44" width="80" height="20" rx="10" fill="#E9ECEF" />
+        <text x="104" y="58" font-size="11" fill="#A8A8A6" text-anchor="middle">Dév Mobile</text>
+        <text x="156" y="58" font-size="12" fill="#A8A8A6">✓ Réalisé le 23 nov. 2026</text>
+      </g>
+
+      <!-- État Erreur (En retard / isOverdue) -->
+      <g transform="translate(0, 198)">
+        <rect width="804" height="80" rx="12" fill="#FFFFFF" stroke="#B3261E" stroke-width="1.5" />
+        <!-- Liseré rouge d'alerte -->
+        <rect width="8" height="80" rx="4" fill="#B3261E" />
+        <rect x="24" y="28" width="24" height="24" rx="4" fill="#FFFFFF" stroke="#B3261E" stroke-width="2" />
+        <text x="64" y="32" font-size="15" font-weight="600" fill="#1C1B1F">Projet Mobile - TP06 Wireframes (État Erreur - En retard)</text>
+        <rect x="64" y="44" width="80" height="20" rx="10" fill="#E9ECEF" />
+        <text x="104" y="58" font-size="11" font-weight="600" fill="#4A4F4C" text-anchor="middle">Dév Mobile</text>
+        <!-- Badge Retard rouge -->
+        <rect x="154" y="44" width="130" height="20" rx="10" fill="#B3261E" />
+        <text x="219" y="58" font-size="11" font-weight="bold" fill="#FFFFFF" text-anchor="middle">⚠️ EN RETARD</text>
+        <text x="296" y="58" font-size="12" font-weight="bold" fill="#B3261E">Date limite dépassée : Hier à 23:59</text>
+      </g>
+    </g>
+
+    <!-- SOUS-SECTION 3.3 : CHAMPS DE SAISIE -->
+    <g transform="translate(0, 440)">
+      <text x="0" y="0" font-size="14" font-weight="bold" fill="#4A4F4C">3.3. Champ de Saisie (TextFormField — OutlineInputBorder, Coins 12 dp)</text>
+
+      <!-- Champ Normal -->
+      <g transform="translate(0, 14)">
+        <text x="4" y="0" font-size="12" font-weight="bold" fill="#4A4F4C">Titre de la tâche (Normal)</text>
+        <rect y="8" width="250" height="48" rx="12" fill="#FFFFFF" stroke="#79747E" stroke-width="1.5" />
+        <text x="16" y="38" font-size="14" fill="#1C1B1F">TP Réseaux VLAN</text>
+      </g>
+
+      <!-- Champ Désactivé -->
+      <g transform="translate(276, 14)">
+        <text x="4" y="0" font-size="12" font-weight="bold" fill="#A8A8A6">Titre de la tâche (Désactivé)</text>
+        <rect y="8" width="250" height="48" rx="12" fill="#F4F4F2" stroke="#E0E0DC" />
+        <text x="16" y="38" font-size="14" fill="#A8A8A6">Lecture seule...</text>
+      </g>
+
+      <!-- Champ Erreur -->
+      <g transform="translate(552, 14)">
+        <text x="4" y="0" font-size="12" font-weight="bold" fill="#B3261E">Titre de la tâche (Erreur)</text>
+        <rect y="8" width="252" height="48" rx="12" fill="#FFFFFF" stroke="#B3261E" stroke-width="2" />
+        <text x="16" y="38" font-size="14" fill="#1C1B1F"></text>
+        <text x="4" y="72" font-size="11" font-weight="bold" fill="#B3261E">⚠️ Le titre est obligatoire et ne peut être vide.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- SECTION 4 : FENÊTRES VISÉES & ADAPTABILITÉ -->
+  <!-- ========================================== -->
+  <g transform="translate(48, 1140)">
+    <line x1="0" y1="0" x2="804" y2="0" stroke="#E0E0DC" stroke-width="1.5" />
+    <text x="0" y="30" font-size="14" font-weight="bold" fill="#1C1B1F">4. Tailles d'écran cibles :</text>
+    <text x="0" y="52" font-size="12" fill="#4A4F4C">• <tspan font-weight="bold">Compacte (&lt; 600 dp)</tspan> : Téléphone (360 × 800 dp de référence, cible principale de Moussa)</text>
+    <text x="320" y="52" font-size="12" fill="#4A4F4C">• <tspan font-weight="bold">Moyenne (600–839 dp)</tspan> : Téléphone élargi / Petite tablette</text>
+    <text x="620" y="52" font-size="12" fill="#4A4F4C">• <tspan font-weight="bold">Étendue (≥ 840 dp)</tspan> : Split-view liste + détail</text>
+  </g>
+</svg>

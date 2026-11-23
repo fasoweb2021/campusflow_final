@@ -27,3 +27,12 @@ Retrouvez ci-dessous l'ensemble des wireframes basse fidélité (format 360 × 8
 ---
 
 > Pour l'analyse comparative détaillée et la grille de notation de ces trois variantes, consultez [docs/seance2/06_choix_variante.md](../06_choix_variante.md).
+
+---
+
+## 3. Planche du Design System v1
+
+- **Planche visuelle SVG** : [docs/seance2/design_system.svg](../design_system.svg)
+- **Spécifications complètes** : [docs/seance2/07_design_system.md](../07_design_system.md)
+
+![Design System](../design_system.svg)
