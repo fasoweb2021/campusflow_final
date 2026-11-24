@@ -1,5 +1,7 @@
 # CampusFlow
 
+> 📋 **Récapitulatif du rendu enseignant** : Consultez le document [docs/RENDU.md](docs/RENDU.md) contenant la grille d'auto-vérification complète (séances 1 à 7), la liste exhaustive des fichiers, captures et commits associés.
+
 Application mobile d'aide à la gestion académique pour les étudiants d'Afrique francophone (Burkina Faso en priorité). CampusFlow permet de suivre ses cours, ses échéances de devoirs/examens et ses tâches au quotidien, en tenant compte des contraintes réelles du terrain (connectivité mobile intermittente, téléphones d'entrée de gamme, maîtrise de la consommation de données).
 
 Projet réalisé dans le cadre du module de Programmation Mobile (Master 1).
@@ -11,6 +13,7 @@ campusflow/                      ← Racine du dépôt Git
 ├── AGENTS.md                    ← Règles et consignes pour l'agent de développement
 ├── README.md                    ← Présentation, guide d'installation et de lancement
 ├── docs/                        ← Documentation d'architecture et livrables de séances
+│   ├── RENDU.md                 ← Récapitulatif d'auto-vérification pour l'enseignant
 │   ├── ARCHITECTURE.md          ← Dossier d'architecture technique (source de vérité)
 │   ├── seance1/                 ← Séance 1 : Écosystème mobile (comparatif, autopsie, décision)
 │   ├── seance2/                 ← Séance 2 : UX/UI, personas, wireframes, design system
