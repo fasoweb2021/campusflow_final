@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -22,7 +23,11 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
-    await tester.pumpWidget(const CampusFlowApp());
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: CampusFlowApp(),
+      ),
+    );
 
     expect(find.bySemanticsLabel('Logo CampusFlow'), findsOneWidget);
     expect(find.text('CampusFlow'), findsOneWidget);
@@ -49,8 +54,10 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: EcheancesScreen(),
+      const ProviderScope(
+        child: MaterialApp(
+          home: EcheancesScreen(),
+        ),
       ),
     );
 
@@ -93,8 +100,10 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: EcheancesScreen(),
+      const ProviderScope(
+        child: MaterialApp(
+          home: EcheancesScreen(),
+        ),
       ),
     );
 
@@ -138,15 +147,17 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      MaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('fr', 'FR')],
-        locale: const Locale('fr', 'FR'),
-        home: TaskFormScreen(courses: sampleCourses),
+      ProviderScope(
+        child: MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('fr', 'FR')],
+          locale: const Locale('fr', 'FR'),
+          home: TaskFormScreen(courses: sampleCourses),
+        ),
       ),
     );
 
@@ -165,7 +176,9 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const CampusFlowApp(),
+      const ProviderScope(
+        child: CampusFlowApp(),
+      ),
     );
 
     // Naviguer vers l'écran Échéances
@@ -212,8 +225,10 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: EcheancesScreen(),
+      const ProviderScope(
+        child: MaterialApp(
+          home: EcheancesScreen(),
+        ),
       ),
     );
 
