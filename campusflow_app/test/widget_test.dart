@@ -348,7 +348,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(ProfilScreen), findsOneWidget);
-    expect(find.text('Moussa Traoré'), findsOneWidget);
-    expect(find.text('Master 1 Informatique'), findsWidgets);
+    expect(find.text('Moussa Ouédraogo'), findsOneWidget);
+    expect(find.text('Licence 3 Informatique'), findsWidgets);
   });
 }

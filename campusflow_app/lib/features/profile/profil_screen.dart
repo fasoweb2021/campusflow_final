@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 const sampleProfileUser = User(
   id: 'u1',
-  name: 'Moussa Traoré',
-  email: 'moussa.traore@univ.bf',
-  program: 'Master 1 Informatique',
+  name: 'Moussa Ouédraogo',
+  email: 'etudiant@campusflow.bf',
+  program: 'Licence 3 Informatique',
 );
 
 class ProfilScreen extends StatelessWidget {
