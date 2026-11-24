@@ -79,4 +79,49 @@ void main() {
     );
     expect(updatedCheckbox.value, equals(!initialValue));
   });
+
+  testWidgets(
+      'Ouvrir le détail d\'une tâche à faire, appuyer sur Marquer comme fait et vérifier qu\'au retour elle est cochée',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: EcheancesScreen(),
+      ),
+    );
+
+    // Trouver une tâche non faite
+    final taskTitleFinder =
+        find.text('Devoir maison : Arbres B+ et indexation');
+    expect(taskTitleFinder, findsOneWidget);
+
+    // Tap sur la tâche pour ouvrir l'écran Détail
+    await tester.tap(taskTitleFinder);
+    await tester.pumpAndSettle();
+
+    // Vérifie l'affichage de l'écran Détail et du bouton
+    expect(find.text('Détail'), findsOneWidget);
+    expect(find.text('Marquer comme fait'), findsOneWidget);
+
+    // Clic sur "Marquer comme fait"
+    await tester.tap(find.text('Marquer comme fait'));
+    await tester.pumpAndSettle();
+
+    // Vérifie le retour sur Échéances et que la tâche est maintenant cochée
+    expect(find.text('Échéances'), findsWidgets);
+    final taskTileFinder = find.ancestor(
+      of: find.text('Devoir maison : Arbres B+ et indexation'),
+      matching: find.byType(TaskTile),
+    );
+    final checkbox = tester.widget<Checkbox>(
+      find.descendant(
+        of: taskTileFinder,
+        matching: find.byType(Checkbox),
+      ),
+    );
+    expect(checkbox.value, isTrue);
+  });
 }

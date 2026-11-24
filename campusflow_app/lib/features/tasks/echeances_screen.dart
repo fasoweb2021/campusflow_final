@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 
 import 'data/sample_tasks.dart';
+import 'task_detail_screen.dart';
 import 'widgets/task_tile.dart';
 
 class EcheancesScreen extends StatefulWidget {
@@ -30,6 +31,28 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
     });
   }
 
+  Future<void> _openDetail(Task task) async {
+    final updatedTask = await Navigator.push<Task>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskDetailScreen(
+          task: task,
+          courses: sampleCourses,
+        ),
+      ),
+    );
+
+    if (updatedTask != null) {
+      setState(() {
+        _tasks = [
+          for (final t in _tasks)
+            if (t.id == updatedTask.id) updatedTask else t,
+        ];
+        _tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +72,7 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
             task: task,
             course: course,
             onToggle: () => _toggleTask(task.id),
+            onTap: () => _openDetail(task),
           );
         },
       ),
