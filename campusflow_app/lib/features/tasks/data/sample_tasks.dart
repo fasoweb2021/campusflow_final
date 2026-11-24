@@ -25,16 +25,19 @@ final sampleCoursesMap = {
   for (final course in sampleCourses) course.id: course,
 };
 
+DateTime _atEndOfDay(DateTime date) =>
+    DateTime(date.year, date.month, date.day, 23, 59);
+
 List<Task> getSampleTasks([DateTime? referenceDate]) {
   final now = referenceDate ?? DateTime.now();
 
   return <Task>[
-    // 2 tâches en retard (non faites avec date antérieure à aujourd'hui)
+    // 2 tâches en retard (non faites avec date antérieure à aujourd'hui, heure fixée à 23:59)
     Task(
       id: 't1',
       title: 'Devoir maison : Arbres B+ et indexation',
       description: 'Implémentation en C des opérations d\'insertion et recherche',
-      dueDate: now.subtract(const Duration(days: 3)),
+      dueDate: _atEndOfDay(now.subtract(const Duration(days: 3))),
       done: false,
       courseId: 'c1',
     ),
@@ -42,7 +45,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't2',
       title: 'Rapport de TP : Architecture Flutter',
       description: 'Analyse comparative du cycle de vie des widgets',
-      dueDate: now.subtract(const Duration(days: 1)),
+      dueDate: _atEndOfDay(now.subtract(const Duration(days: 1))),
       done: false,
       courseId: 'c2',
     ),
@@ -52,7 +55,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't3',
       title: 'Installation SDK Android & Émulateur Pixel',
       description: 'Configuration sur disque D: et validation flutter doctor',
-      dueDate: now.subtract(const Duration(days: 4)),
+      dueDate: _atEndOfDay(now.subtract(const Duration(days: 4))),
       done: true,
       courseId: 'c2',
     ),
@@ -60,7 +63,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't4',
       title: 'Fiche de synthèse NoSQL vs SQL',
       description: 'Comparaison des modèles relationnels et orientés documents',
-      dueDate: now.add(const Duration(days: 1)),
+      dueDate: _atEndOfDay(now.add(const Duration(days: 1))),
       done: true,
       courseId: 'c3',
     ),
@@ -70,7 +73,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't5',
       title: 'Projet Mobile : Écran Échéances avec ListView',
       description: 'Création du widget TaskTile selon la variante C',
-      dueDate: now.add(const Duration(days: 2)),
+      dueDate: _atEndOfDay(now.add(const Duration(days: 2))),
       done: false,
       courseId: 'c2',
     ),
@@ -78,7 +81,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't6',
       title: 'Exercices sur les graphes et flot maximal',
       description: 'Algorithme de Ford-Fulkerson et Edmonds-Karp',
-      dueDate: now.add(const Duration(days: 4)),
+      dueDate: _atEndOfDay(now.add(const Duration(days: 4))),
       done: false,
       courseId: 'c1',
     ),
@@ -86,7 +89,7 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't7',
       title: 'TP Noté : Réplication et consensus Raft',
       description: 'Simulation de quorum sur environnement distribué',
-      dueDate: now.add(const Duration(days: 6)),
+      dueDate: _atEndOfDay(now.add(const Duration(days: 6))),
       done: false,
       courseId: 'c3',
     ),
@@ -94,10 +97,9 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
       id: 't8',
       title: 'Préparation Examen Blanc d\'Algorithmique',
       description: 'Révision des annales de Master 1 des trois dernières années',
-      dueDate: now.add(const Duration(days: 8)),
+      dueDate: _atEndOfDay(now.add(const Duration(days: 8))),
       done: false,
       courseId: 'c1',
     ),
   ];
 }
-

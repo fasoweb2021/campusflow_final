@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:campusflow_app/app.dart';
+import 'package:campusflow_app/features/tasks/data/sample_tasks.dart';
 import 'package:campusflow_app/features/tasks/echeances_screen.dart';
+import 'package:campusflow_app/features/tasks/task_form_screen.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_tile.dart';
 
 void main() {
@@ -123,5 +126,78 @@ void main() {
       ),
     );
     expect(checkbox.value, isTrue);
+  });
+
+  testWidgets('Formulaire affiche une erreur si le titre est vide',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('fr', 'FR')],
+        locale: const Locale('fr', 'FR'),
+        home: TaskFormScreen(courses: sampleCourses),
+      ),
+    );
+
+    // Appui direct sur Enregistrer
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Le titre est obligatoire'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Remplir le titre et le cours puis enregistrer ajoute une tâche à la liste',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      const CampusFlowApp(),
+    );
+
+    // Naviguer vers l'écran Échéances
+    await tester.tap(find.text('Commencer'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TaskTile), findsNWidgets(8));
+
+    // Clic sur le FAB (+) pour ouvrir le formulaire
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Nouvelle tâche'), findsOneWidget);
+
+    // Saisie du Titre
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Titre'),
+      'Nouveau devoir TP18',
+    );
+
+    // Sélection du Cours
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Programmation Mobile').last);
+    await tester.pumpAndSettle();
+
+    // Appui sur Enregistrer
+    await tester.tap(find.text('Enregistrer'));
+    await tester.pumpAndSettle();
+
+    // Vérifie le retour sur la liste avec 9 tuiles et le SnackBar
+    expect(find.text('Échéances'), findsWidgets);
+    expect(find.byType(TaskTile), findsNWidgets(9));
+    expect(find.text('Nouveau devoir TP18'), findsOneWidget);
+    expect(find.text('Tâche ajoutée'), findsOneWidget);
   });
 }

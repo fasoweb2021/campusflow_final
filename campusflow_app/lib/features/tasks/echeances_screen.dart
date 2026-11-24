@@ -3,6 +3,7 @@ import 'package:campusflow_models/campusflow_models.dart';
 
 import 'data/sample_tasks.dart';
 import 'task_detail_screen.dart';
+import 'task_form_screen.dart';
 import 'widgets/task_tile.dart';
 
 class EcheancesScreen extends StatefulWidget {
@@ -53,6 +54,29 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
     }
   }
 
+  Future<void> _openAddTaskForm() async {
+    final newTask = await Navigator.push<Task>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskFormScreen(courses: sampleCourses),
+      ),
+    );
+
+    if (newTask != null) {
+      setState(() {
+        _tasks = [..._tasks, newTask];
+        _tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tâche ajoutée'),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +101,7 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: _openAddTaskForm,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(

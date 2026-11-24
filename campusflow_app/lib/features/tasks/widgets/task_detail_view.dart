@@ -134,3 +134,4 @@ class TaskDetailView extends StatelessWidget {
     );
   }
 }
+
