@@ -73,27 +73,41 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
 
         Widget buildFilterSelector() {
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: SizedBox(
+              width: double.infinity,
               child: SegmentedButton<FiltreTaches>(
+                showSelectedIcon: false,
+                style: const ButtonStyle(
+                  visualDensity: VisualDensity.compact,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 segments: [
                   ButtonSegment<FiltreTaches>(
                     value: FiltreTaches.aFaire,
-                    label: Text(
-                      'À faire (${compteurs[FiltreTaches.aFaire] ?? 0})',
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'À faire (${compteurs[FiltreTaches.aFaire] ?? 0})',
+                      ),
                     ),
                   ),
                   ButtonSegment<FiltreTaches>(
                     value: FiltreTaches.faites,
-                    label: Text(
-                      'Faites (${compteurs[FiltreTaches.faites] ?? 0})',
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'Faites (${compteurs[FiltreTaches.faites] ?? 0})',
+                      ),
                     ),
                   ),
                   ButtonSegment<FiltreTaches>(
                     value: FiltreTaches.enRetard,
-                    label: Text(
-                      'En retard (${compteurs[FiltreTaches.enRetard] ?? 0})',
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'En retard (${compteurs[FiltreTaches.enRetard] ?? 0})',
+                      ),
                     ),
                   ),
                 ],

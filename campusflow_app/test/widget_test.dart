@@ -423,4 +423,46 @@ void main() {
     expect(find.text('Moussa Ouédraogo'), findsOneWidget);
     expect(find.text('Licence 3 Informatique'), findsWidgets);
   });
+
+  testWidgets(
+      'Vérifie que les libellés Échéances, Cours et Profil sont visibles en permanence dans la barre de navigation',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final navBarFinder = find.byType(NavigationBar);
+    expect(navBarFinder, findsOneWidget);
+
+    final navBar = tester.widget<NavigationBar>(navBarFinder);
+    expect(
+      navBar.labelBehavior,
+      NavigationDestinationLabelBehavior.alwaysShow,
+    );
+
+    expect(
+      find.descendant(of: navBarFinder, matching: find.text('Échéances')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: navBarFinder, matching: find.text('Cours')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: navBarFinder, matching: find.text('Profil')),
+      findsOneWidget,
+    );
+  });
 }

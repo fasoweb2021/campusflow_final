@@ -97,7 +97,10 @@ class TaskTile extends StatelessWidget {
                       ),
                     ],
                     const SizedBox(height: 4.0),
-                    Row(
+                    Wrap(
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(
                           formattedDate,
@@ -108,8 +111,7 @@ class TaskTile extends StatelessWidget {
                                 : FontWeight.w400,
                           ),
                         ),
-                        if (isOverdue) ...[
-                          const SizedBox(width: 8.0),
+                        if (isOverdue)
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 6.0,
@@ -128,7 +130,6 @@ class TaskTile extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ],
                       ],
                     ),
                   ],
