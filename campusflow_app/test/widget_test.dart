@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:campusflow_app/app.dart';
+import 'package:campusflow_app/core/storage/token_storage.dart';
+import 'package:campusflow_app/data/auth_repository.dart';
 import 'package:campusflow_app/data/fake_task_repository.dart';
 import 'package:campusflow_app/data/task_repository.dart';
 import 'package:campusflow_app/features/courses/cours_screen.dart';
@@ -16,6 +18,8 @@ import 'package:campusflow_app/features/tasks/widgets/task_tile.dart';
 import 'package:campusflow_app/router/app_router.dart';
 
 import 'failing_task_repository.dart';
+import 'fake_auth_repository.dart';
+import 'in_memory_token_storage.dart';
 
 void main() {
   setUpAll(() async {
@@ -25,10 +29,18 @@ void main() {
   Widget createTestApp({
     String initialLocation = '/taches',
     TaskRepository? repository,
+    bool isAuthenticated = true,
   }) {
     final repo = repository ?? FakeTaskRepository(delay: Duration.zero);
+    final tokenStorage = InMemoryTokenStorage(
+      isAuthenticated ? 'fake-jwt-test-token' : null,
+    );
+    final authRepo = const FakeAuthRepository();
+
     return ProviderScope(
       overrides: [
+        tokenStorageProvider.overrideWithValue(tokenStorage),
+        authRepositoryProvider.overrideWithValue(authRepo),
         taskRepositoryProvider.overrideWithValue(repo),
       ],
       child: CampusFlowApp(
@@ -40,27 +52,46 @@ void main() {
     );
   }
 
-  testWidgets('Écran /login s\'affiche et "Entrer" mène à Échéances',
+  testWidgets('Écran /login s\'affiche et connexion mène à Échéances',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
+    final tokenStorage = InMemoryTokenStorage(null);
+    final authRepo = const FakeAuthRepository();
+
     await tester.pumpWidget(
-      createTestApp(initialLocation: '/login'),
+      ProviderScope(
+        overrides: [
+          tokenStorageProvider.overrideWithValue(tokenStorage),
+          authRepositoryProvider.overrideWithValue(authRepo),
+          taskRepositoryProvider.overrideWithValue(
+            FakeTaskRepository(delay: Duration.zero),
+          ),
+        ],
+        child: const CampusFlowApp(),
+      ),
     );
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Logo CampusFlow'), findsOneWidget);
     expect(find.text('CampusFlow'), findsOneWidget);
-    expect(find.text('Entrer'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Se connecter'), findsOneWidget);
     expect(
       find.text('Vos cours, vos échéances, sans stress'),
       findsOneWidget,
     );
 
-    // Clic sur "Entrer" -> mène à /taches
-    await tester.tap(find.text('Entrer'));
+    // Saisie du mot de passe
+    await tester.enterText(
+      find.widgetWithText(TextFormField, 'Mot de passe *'),
+      'campus2026',
+    );
+    await tester.pumpAndSettle();
+
+    // Clic sur "Se connecter" -> redirection vers /taches
+    await tester.tap(find.widgetWithText(FilledButton, 'Se connecter'));
     await tester.pumpAndSettle();
 
     // Vérifie l'arrivée sur l'écran Échéances avec le SegmentedButton et les tâches à faire
@@ -216,6 +247,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          tokenStorageProvider
+              .overrideWithValue(InMemoryTokenStorage('fake-token')),
+          authRepositoryProvider.overrideWithValue(const FakeAuthRepository()),
           taskRepositoryProvider.overrideWithValue(
             FakeTaskRepository(delay: Duration.zero),
           ),
@@ -488,6 +522,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          tokenStorageProvider
+              .overrideWithValue(InMemoryTokenStorage('fake-token')),
+          authRepositoryProvider.overrideWithValue(const FakeAuthRepository()),
           taskRepositoryProvider.overrideWithValue(
             FakeTaskRepository(delay: Duration.zero),
           ),

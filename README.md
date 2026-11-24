@@ -44,16 +44,44 @@ dart analyze
 dart test
 ```
 
-## Séance 7 — API simulée (`server`)
+## Séance 7 — API simulée et authentification complète
 
-Mise en place d'une API REST locale simulée avec `json-server@0.17.4` et `db.json`, exposant les ressources `/taches`, `/cours` et `/utilisateurs`.
+### 1. Lancement de l'API avec authentification
+Le serveur Node.js (`server/server.js`) gère l'authentification (`POST /login`), la validation des jetons Bearer sur toutes les routes protégées (`/taches`, `/cours`, `/utilisateurs`) et renvoie une erreur 401 si le jeton est absent ou invalide.
 
 Commandes d'installation et de lancement du serveur :
 ```bash
 cd server
 npm install
-npm run start:simple
+npm start
 ```
+*(Pour lancer la version sans authentification utilisée au TP24, utiliser `npm run start:simple`).*
+
+### 2. Compte de démonstration
+Pour vous connecter dans l'application mobile :
+- **Email** : `etudiant@campusflow.bf`
+- **Mot de passe** : `campus2026`
+
+### 3. Lancement de l'application mobile
+Dans un second terminal :
+```bash
+cd campusflow_app
+flutter run
+```
+
+### 4. Tests et vérifications qualité
+```bash
+# Vérification du package de modèles
+cd campusflow_models
+dart analyze
+dart test
+
+# Vérification de l'application mobile
+cd ../campusflow_app
+flutter analyze
+flutter test
+```
+
 
 
 

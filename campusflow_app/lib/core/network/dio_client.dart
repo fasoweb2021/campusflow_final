@@ -2,10 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/api_config.dart';
+import 'auth_interceptor.dart';
 
 /// Fournisseur Riverpod de l'instance [Dio] configurée pour l'application.
 final dioProvider = Provider<Dio>((ref) {
-  return Dio(
+  final dio = Dio(
     BaseOptions(
       baseUrl: ApiConfig.baseUrl,
       connectTimeout: const Duration(seconds: 10),
@@ -17,5 +18,6 @@ final dioProvider = Provider<Dio>((ref) {
       },
     ),
   );
+  dio.interceptors.add(AuthInterceptor(ref));
+  return dio;
 });
-
