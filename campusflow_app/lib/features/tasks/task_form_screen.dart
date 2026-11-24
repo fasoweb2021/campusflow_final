@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 
@@ -70,7 +71,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         courseId: _selectedCourseId,
       );
 
-      Navigator.pop(context, newTask);
+      context.pop(newTask);
     }
   }
 
@@ -98,8 +99,8 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 TextFormField(
                   controller: _titleController,
                   decoration: const InputDecoration(
-                    labelText: 'Titre',
-                    hintText: 'Ex: Devoir de compilation',
+                    labelText: 'Titre *',
+                    hintText: 'Ex : Rendu de projet Flutter',
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -110,38 +111,36 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 ),
                 const SizedBox(height: 16.0),
 
-                // Champ Description (multiligne, facultatif)
+                // Champ Description (multiligne facultatif)
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: 3,
                   decoration: const InputDecoration(
-                    labelText: 'Description (facultatif)',
-                    hintText: 'Détails, consignes ou ressources...',
+                    labelText: 'Description',
+                    hintText: 'Détails ou consignes...',
                   ),
                 ),
                 const SizedBox(height: 16.0),
 
-                // Sélection du Cours (obligatoire)
+                // Sélecteur de Cours
                 DropdownButtonFormField<String>(
                   initialValue: _selectedCourseId,
                   decoration: const InputDecoration(
-                    labelText: 'Cours',
+                    labelText: 'Cours *',
                   ),
-                  items: widget.courses
-                      .map(
-                        (course) => DropdownMenuItem(
-                          value: course.id,
-                          child: Text(course.name),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (val) {
+                  items: widget.courses.map((course) {
+                    return DropdownMenuItem<String>(
+                      value: course.id,
+                      child: Text(course.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
                     setState(() {
-                      _selectedCourseId = val;
+                      _selectedCourseId = value;
                     });
                   },
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
                       return 'Veuillez sélectionner un cours';
                     }
                     return null;
@@ -149,20 +148,18 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 ),
                 const SizedBox(height: 16.0),
 
-                // Sélecteur de date d'échéance
+                // Choix de la date d'échéance
                 InkWell(
                   onTap: _pickDate,
                   borderRadius: BorderRadius.circular(12.0),
                   child: InputDecorator(
                     decoration: const InputDecoration(
                       labelText: 'Date d\'échéance',
-                      suffixIcon: Icon(Icons.calendar_today_outlined),
+                      suffixIcon: Icon(Icons.calendar_today),
                     ),
                     child: Text(
                       formattedDate,
-                      style: textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                      style: textTheme.bodyMedium,
                     ),
                   ),
                 ),
@@ -171,7 +168,10 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 // Bouton Enregistrer
                 FilledButton(
                   onPressed: _submit,
-                  child: const Text('Enregistrer'),
+                  child: Text(
+                    'Enregistrer',
+                    style: TextStyle(color: colorScheme.onPrimary),
+                  ),
                 ),
               ],
             ),

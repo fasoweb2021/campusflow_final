@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../tasks/echeances_screen.dart';
-
-class TitleScreen extends StatelessWidget {
-  const TitleScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +47,9 @@ class TitleScreen extends StatelessWidget {
                 const SizedBox(height: 32.0),
                 FilledButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (context) => const EcheancesScreen(),
-                      ),
-                    );
+                    context.go('/taches');
                   },
-                  child: const Text('Commencer'),
+                  child: const Text('Entrer'),
                 ),
               ],
             ),
@@ -65,3 +59,4 @@ class TitleScreen extends StatelessWidget {
     );
   }
 }
+

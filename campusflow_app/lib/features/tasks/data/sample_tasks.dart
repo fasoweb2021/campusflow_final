@@ -1,19 +1,19 @@
 import 'package:campusflow_models/campusflow_models.dart';
 
-final sampleCourses = <Course>[
-  const Course(
+const sampleCourses = <Course>[
+  Course(
     id: 'c1',
     name: 'Algorithmique Avancée',
     teacher: 'Dr. Koné',
     room: 'Amphi A',
   ),
-  const Course(
+  Course(
     id: 'c2',
     name: 'Programmation Mobile',
     teacher: 'M. Traoré',
     room: 'Labo 3',
   ),
-  const Course(
+  Course(
     id: 'c3',
     name: 'Bases de Données Réparties',
     teacher: 'Dr. Sawadogo',
@@ -103,3 +103,5 @@ List<Task> getSampleTasks([DateTime? referenceDate]) {
     ),
   ];
 }
+
+final sampleTasks = getSampleTasks();

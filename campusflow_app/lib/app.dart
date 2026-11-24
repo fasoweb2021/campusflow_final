@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/theme/app_theme.dart';
-import 'features/home/title_screen.dart';
+import 'router/app_router.dart';
 
 class CampusFlowApp extends StatelessWidget {
-  const CampusFlowApp({super.key});
+  final RouterConfig<Object>? routerConfig;
+
+  const CampusFlowApp({
+    super.key,
+    this.routerConfig,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'CampusFlow',
       theme: AppTheme.lightTheme,
+      routerConfig: routerConfig ?? appRouter,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -21,7 +27,6 @@ class CampusFlowApp extends StatelessWidget {
         Locale('fr', 'FR'),
       ],
       locale: const Locale('fr', 'FR'),
-      home: const TitleScreen(),
     );
   }
 }

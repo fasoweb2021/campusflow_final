@@ -1,44 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:campusflow_app/app.dart';
-import 'package:campusflow_app/features/tasks/data/sample_tasks.dart';
-import 'package:campusflow_app/features/tasks/echeances_screen.dart';
+import 'package:campusflow_app/features/courses/cours_screen.dart';
+import 'package:campusflow_app/features/profile/profil_screen.dart';
 import 'package:campusflow_app/features/tasks/task_detail_screen.dart';
 import 'package:campusflow_app/features/tasks/task_form_screen.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_detail_view.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_tile.dart';
+import 'package:campusflow_app/router/app_router.dart';
 
 void main() {
   setUpAll(() async {
     await initializeDateFormatting('fr_FR');
   });
 
-  testWidgets('Écran de titre affiche les éléments et ouvre Échéances',
+  testWidgets('Écran /login s\'affiche et "Entrer" mène à Échéances',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: CampusFlowApp(),
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/login',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel('Logo CampusFlow'), findsOneWidget);
     expect(find.text('CampusFlow'), findsOneWidget);
-    expect(find.text('Commencer'), findsOneWidget);
+    expect(find.text('Entrer'), findsOneWidget);
     expect(
       find.text('Vos cours, vos échéances, sans stress'),
       findsOneWidget,
     );
 
-    // Clic sur "Commencer"
-    await tester.tap(find.text('Commencer'));
+    // Clic sur "Entrer" -> mène à /taches
+    await tester.tap(find.text('Entrer'));
     await tester.pumpAndSettle();
 
     // Vérifie l'arrivée sur l'écran Échéances
@@ -46,20 +52,52 @@ void main() {
     expect(find.byType(TaskTile), findsNWidgets(8));
   });
 
-  testWidgets(
-      'Écran Échéances affiche 8 tuiles et cocher une tâche change son état',
+  testWidgets('/taches/inconnu affiche Tâche introuvable avec bouton de retour',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: EcheancesScreen(),
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches/inconnu',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
         ),
       ),
     );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tâche introuvable'), findsOneWidget);
+    expect(find.text('Retour aux échéances'), findsOneWidget);
+
+    // Clic sur le bouton de retour -> retour sur /taches
+    await tester.tap(find.text('Retour aux échéances'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Échéances'), findsWidgets);
+    expect(find.byType(TaskTile), findsNWidgets(8));
+  });
+
+  testWidgets('Écran Échéances affiche 8 tuiles et cocher une tâche change son état',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
 
     // Vérifie la présence des 8 tuiles
     expect(find.byType(TaskTile), findsNWidgets(8));
@@ -100,12 +138,16 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: EcheancesScreen(),
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     // Trouver une tâche non faite
     final taskTitleFinder =
@@ -148,18 +190,17 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        child: MaterialApp(
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [Locale('fr', 'FR')],
-          locale: const Locale('fr', 'FR'),
-          home: TaskFormScreen(courses: sampleCourses),
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches/nouvelle',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
         ),
       ),
     );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TaskFormScreen), findsOneWidget);
 
     // Appui direct sur Enregistrer
     await tester.tap(find.text('Enregistrer'));
@@ -176,13 +217,15 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: CampusFlowApp(),
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
       ),
     );
-
-    // Naviguer vers l'écran Échéances
-    await tester.tap(find.text('Commencer'));
     await tester.pumpAndSettle();
 
     expect(find.byType(TaskTile), findsNWidgets(8));
@@ -195,8 +238,8 @@ void main() {
 
     // Saisie du Titre
     await tester.enterText(
-      find.widgetWithText(TextFormField, 'Titre'),
-      'Nouveau devoir TP18',
+      find.widgetWithText(TextFormField, 'Titre *'),
+      'Nouveau devoir TP21',
     );
 
     // Sélection du Cours
@@ -213,27 +256,32 @@ void main() {
     // Vérifie le retour sur la liste avec 9 tuiles et le SnackBar
     expect(find.text('Échéances'), findsWidgets);
     expect(find.byType(TaskTile), findsNWidgets(9));
-    expect(find.text('Nouveau devoir TP18'), findsOneWidget);
+    expect(find.text('Nouveau devoir TP21'), findsOneWidget);
     expect(find.text('Tâche ajoutée'), findsOneWidget);
   });
 
   testWidgets(
-      'Mise en page tablette (1280x800) : liste et détail côte à côte',
+      'Mise en page tablette (1280x800) : liste et détail côte à côte avec NavigationRail',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(1280, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(
-          home: EcheancesScreen(),
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
-    // Vérifie que les tuiles sont présentes
-    expect(find.byType(TaskTile), findsWidgets);
+    // Vérifie la présence du NavigationRail et l'absence de NavigationBar
+    expect(find.byType(NavigationRail), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
 
     // Au départ, aucune tâche n'est sélectionnée : le panneau droit affiche "Sélectionnez une tâche"
     expect(find.text('Sélectionnez une tâche'), findsOneWidget);
@@ -268,5 +316,39 @@ void main() {
       ),
     );
     expect(updatedTile.task.done, isTrue);
+  });
+
+  testWidgets('Navigation ShellRoute : bascule vers Cours puis Profil',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Navigation vers Cours
+    await tester.tap(find.text('Cours'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CoursScreen), findsOneWidget);
+    expect(find.text('Algorithmique Avancée'), findsOneWidget);
+
+    // Navigation vers Profil
+    await tester.tap(find.text('Profil'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfilScreen), findsOneWidget);
+    expect(find.text('Moussa Traoré'), findsOneWidget);
+    expect(find.text('Master 1 Informatique'), findsWidgets);
   });
 }
