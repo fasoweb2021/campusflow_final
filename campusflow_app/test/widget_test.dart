@@ -6,7 +6,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:campusflow_app/app.dart';
 import 'package:campusflow_app/features/tasks/data/sample_tasks.dart';
 import 'package:campusflow_app/features/tasks/echeances_screen.dart';
+import 'package:campusflow_app/features/tasks/task_detail_screen.dart';
 import 'package:campusflow_app/features/tasks/task_form_screen.dart';
+import 'package:campusflow_app/features/tasks/widgets/task_detail_view.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_tile.dart';
 
 void main() {
@@ -106,6 +108,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Vérifie l'affichage de l'écran Détail et du bouton
+    expect(find.byType(TaskDetailScreen), findsOneWidget);
     expect(find.text('Détail'), findsOneWidget);
     expect(find.text('Marquer comme fait'), findsOneWidget);
 
@@ -199,5 +202,56 @@ void main() {
     expect(find.byType(TaskTile), findsNWidgets(9));
     expect(find.text('Nouveau devoir TP18'), findsOneWidget);
     expect(find.text('Tâche ajoutée'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Mise en page tablette (1280x800) : liste et détail côte à côte',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1280, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: EcheancesScreen(),
+      ),
+    );
+
+    // Vérifie que les tuiles sont présentes
+    expect(find.byType(TaskTile), findsWidgets);
+
+    // Au départ, aucune tâche n'est sélectionnée : le panneau droit affiche "Sélectionnez une tâche"
+    expect(find.text('Sélectionnez une tâche'), findsOneWidget);
+
+    // Tap sur une tâche dans la colonne de gauche (ex: "Devoir maison : Arbres B+ et indexation")
+    await tester.tap(find.text('Devoir maison : Arbres B+ et indexation'));
+    await tester.pump();
+
+    // Le message initial disparaît et le composant TaskDetailView s'affiche dans le panneau droit
+    expect(find.text('Sélectionnez une tâche'), findsNothing);
+    expect(find.byType(TaskDetailView), findsOneWidget);
+    expect(find.text('Marquer comme fait'), findsOneWidget);
+
+    // Vérifie que la tuile correspondante est marquée sélectionnée
+    final selectedTile = tester.widget<TaskTile>(
+      find.ancestor(
+        of: find.text('Devoir maison : Arbres B+ et indexation'),
+        matching: find.byType(TaskTile),
+      ),
+    );
+    expect(selectedTile.isSelected, isTrue);
+
+    // Tap sur "Marquer comme fait" dans le panneau de droite
+    await tester.tap(find.text('Marquer comme fait'));
+    await tester.pump();
+
+    // Vérifie que la tâche est marquée comme faite
+    final updatedTile = tester.widget<TaskTile>(
+      find.ancestor(
+        of: find.text('Devoir maison : Arbres B+ et indexation'),
+        matching: find.byType(TaskTile),
+      ),
+    );
+    expect(updatedTile.task.done, isTrue);
   });
 }

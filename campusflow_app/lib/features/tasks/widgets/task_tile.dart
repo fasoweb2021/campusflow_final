@@ -7,6 +7,7 @@ class TaskTile extends StatelessWidget {
   final Course? course;
   final VoidCallback? onToggle;
   final VoidCallback? onTap;
+  final bool isSelected;
 
   const TaskTile({
     super.key,
@@ -14,6 +15,7 @@ class TaskTile extends StatelessWidget {
     this.course,
     this.onToggle,
     this.onTap,
+    this.isSelected = false,
   });
 
   @override
@@ -29,17 +31,21 @@ class TaskTile extends StatelessWidget {
     // Couleurs selon l'état de la tâche
     final borderColor = isOverdue
         ? colorScheme.error
-        : colorScheme.outlineVariant;
+        : (isSelected ? colorScheme.primary : colorScheme.outlineVariant);
     final dateColor = isOverdue
         ? colorScheme.error
         : colorScheme.onSurfaceVariant;
     final titleColor = task.done
         ? colorScheme.onSurfaceVariant
         : colorScheme.onSurface;
+    final cardColor = isSelected
+        ? colorScheme.primaryContainer
+        : colorScheme.surface;
 
     return Card(
+      color: cardColor,
       margin: const EdgeInsets.symmetric(vertical: 4.0),
-      elevation: 0,
+      elevation: isSelected ? 1 : 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
         side: BorderSide(
