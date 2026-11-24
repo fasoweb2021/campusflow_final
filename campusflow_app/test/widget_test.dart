@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:campusflow_app/app.dart';
 import 'package:campusflow_app/features/courses/cours_screen.dart';
 import 'package:campusflow_app/features/profile/profil_screen.dart';
+import 'package:campusflow_app/features/tasks/providers/filtres.dart';
 import 'package:campusflow_app/features/tasks/task_detail_screen.dart';
 import 'package:campusflow_app/features/tasks/task_form_screen.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_detail_view.dart';
@@ -47,9 +48,10 @@ void main() {
     await tester.tap(find.text('Entrer'));
     await tester.pumpAndSettle();
 
-    // Vérifie l'arrivée sur l'écran Échéances
+    // Vérifie l'arrivée sur l'écran Échéances avec le SegmentedButton et les tâches à faire
     expect(find.text('Échéances'), findsWidgets);
-    expect(find.byType(TaskTile), findsNWidgets(8));
+    expect(find.byType(SegmentedButton<FiltreTaches>), findsOneWidget);
+    expect(find.byType(TaskTile), findsNWidgets(6));
   });
 
   testWidgets('/taches/inconnu affiche Tâche introuvable avec bouton de retour',
@@ -78,10 +80,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Échéances'), findsWidgets);
-    expect(find.byType(TaskTile), findsNWidgets(8));
+    expect(find.byType(TaskTile), findsNWidgets(6));
   });
 
-  testWidgets('Écran Échéances affiche 8 tuiles et cocher une tâche change son état',
+  testWidgets(
+      'Écran Échéances affiche les filtres et changer de filtre met à jour la liste',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1.0;
@@ -99,39 +102,61 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Vérifie la présence des 8 tuiles
-    expect(find.byType(TaskTile), findsNWidgets(8));
+    // Filtre initial "À faire (6)"
+    expect(find.byType(TaskTile), findsNWidgets(6));
 
-    // Récupère l'état initial de la première case à cocher
-    final firstCheckbox = tester.widget<Checkbox>(
-      find.descendant(
-        of: find.byType(TaskTile).first,
-        matching: find.byType(Checkbox),
+    // Basculer sur "Faites"
+    await tester.tap(find.textContaining('Faites'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TaskTile), findsNWidgets(2));
+
+    // Basculer sur "En retard"
+    await tester.tap(find.textContaining('En retard'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TaskTile), findsNWidgets(2));
+  });
+
+  testWidgets('Cocher une tâche non faite la fait basculer dans les tâches faites',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: createRouter(
+            initialLocation: '/taches',
+            navigatorKey: GlobalKey<NavigatorState>(),
+          ),
+        ),
       ),
     );
-    final initialValue = firstCheckbox.value!;
+    await tester.pumpAndSettle();
 
-    // Clic sur la première case à cocher pour basculer son état
+    // 6 tâches à faire au départ
+    expect(find.byType(TaskTile), findsNWidgets(6));
+
+    // Clic sur la case de la première tâche à faire
     await tester.tap(
       find.descendant(
         of: find.byType(TaskTile).first,
         matching: find.byType(Checkbox),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Vérifie que l'état a bien basculé
-    final updatedCheckbox = tester.widget<Checkbox>(
-      find.descendant(
-        of: find.byType(TaskTile).first,
-        matching: find.byType(Checkbox),
-      ),
-    );
-    expect(updatedCheckbox.value, equals(!initialValue));
+    // La tâche cochée passe dans "Faites" donc la liste "À faire" n'en contient plus que 5
+    expect(find.byType(TaskTile), findsNWidgets(5));
+
+    // Aller sur "Faites" : elle compte désormais 3 tâches
+    await tester.tap(find.textContaining('Faites'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TaskTile), findsNWidgets(3));
   });
 
   testWidgets(
-      'Ouvrir le détail d\'une tâche à faire, appuyer sur Marquer comme fait et vérifier qu\'au retour elle est cochée',
+      'Ouvrir le détail d\'une tâche à faire, appuyer sur Marquer comme fait et vérifier qu\'au retour elle est dans Faites',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
     tester.view.devicePixelRatio = 1.0;
@@ -167,8 +192,15 @@ void main() {
     await tester.tap(find.text('Marquer comme fait'));
     await tester.pumpAndSettle();
 
-    // Vérifie le retour sur Échéances et que la tâche est maintenant cochée
+    // Retour sur Échéances : la tâche n'est plus dans "À faire", elle est dans "Faites"
     expect(find.text('Échéances'), findsWidgets);
+    expect(find.text('Devoir maison : Arbres B+ et indexation'), findsNothing);
+
+    // Basculer sur "Faites"
+    await tester.tap(find.textContaining('Faites'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Devoir maison : Arbres B+ et indexation'), findsOneWidget);
     final taskTileFinder = find.ancestor(
       of: find.text('Devoir maison : Arbres B+ et indexation'),
       matching: find.byType(TaskTile),
@@ -215,8 +247,14 @@ void main() {
     await tester.tap(find.text('Marquer comme fait'));
     await tester.pumpAndSettle();
 
-    // L'écran revient sur /taches avec la liste
+    // L'écran revient sur /taches
     expect(find.text('Échéances'), findsWidgets);
+
+    // Vérifie que sous l'onglet "Faites", la tâche t1 est cochée
+    await tester.tap(find.textContaining('Faites'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Devoir maison : Arbres B+ et indexation'), findsOneWidget);
     final taskTileFinder = find.ancestor(
       of: find.text('Devoir maison : Arbres B+ et indexation'),
       matching: find.byType(TaskTile),
@@ -276,7 +314,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(TaskTile), findsNWidgets(8));
+    expect(find.byType(TaskTile), findsNWidgets(6));
 
     // Clic sur le FAB (+) pour ouvrir le formulaire
     await tester.tap(find.byType(FloatingActionButton));
@@ -287,7 +325,7 @@ void main() {
     // Saisie du Titre
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Titre *'),
-      'Nouveau devoir TP22 Riverpod',
+      'Nouveau devoir TP23 Riverpod',
     );
 
     // Sélection du Cours
@@ -301,15 +339,15 @@ void main() {
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 
-    // Vérifie le retour sur la liste avec 9 tuiles et le SnackBar
+    // Vérifie le retour sur la liste avec 7 tuiles (6 + 1 non faite) et le SnackBar
     expect(find.text('Échéances'), findsWidgets);
-    expect(find.byType(TaskTile), findsNWidgets(9));
-    expect(find.text('Nouveau devoir TP22 Riverpod'), findsOneWidget);
+    expect(find.byType(TaskTile), findsNWidgets(7));
+    expect(find.text('Nouveau devoir TP23 Riverpod'), findsOneWidget);
     expect(find.text('Tâche ajoutée'), findsOneWidget);
   });
 
   testWidgets(
-      'Mise en page tablette (1280x800) : liste et détail côte à côte avec NavigationRail',
+      'Mise en page tablette (1280x800) : si la tâche n\'est plus dans la liste filtrée, revient à Sélectionnez une tâche',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(1280, 800);
     tester.view.devicePixelRatio = 1.0;
@@ -327,43 +365,29 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Vérifie la présence du NavigationRail et l'absence de NavigationBar
+    // Vérifie la présence du NavigationRail et de SegmentedButton
     expect(find.byType(NavigationRail), findsOneWidget);
-    expect(find.byType(NavigationBar), findsNothing);
+    expect(find.byType(SegmentedButton<FiltreTaches>), findsOneWidget);
 
-    // Au départ, aucune tâche n'est sélectionnée : le panneau droit affiche "Sélectionnez une tâche"
+    // Au départ : "Sélectionnez une tâche"
     expect(find.text('Sélectionnez une tâche'), findsOneWidget);
 
-    // Tap sur une tâche dans la colonne de gauche (ex: "Devoir maison : Arbres B+ et indexation")
+    // Tap sur une tâche non faite (ex: "Devoir maison : Arbres B+ et indexation")
     await tester.tap(find.text('Devoir maison : Arbres B+ et indexation'));
     await tester.pump();
 
-    // Le message initial disparaît et le composant TaskDetailView s'affiche dans le panneau droit
+    // Le détail s'affiche
     expect(find.text('Sélectionnez une tâche'), findsNothing);
     expect(find.byType(TaskDetailView), findsOneWidget);
     expect(find.text('Marquer comme fait'), findsOneWidget);
 
-    // Vérifie que la tuile correspondante est marquée sélectionnée
-    final selectedTile = tester.widget<TaskTile>(
-      find.ancestor(
-        of: find.text('Devoir maison : Arbres B+ et indexation'),
-        matching: find.byType(TaskTile),
-      ),
-    );
-    expect(selectedTile.isSelected, isTrue);
-
-    // Tap sur "Marquer comme fait" dans le panneau de droite
+    // Clic sur "Marquer comme fait" -> la tâche devient faite
     await tester.tap(find.text('Marquer comme fait'));
     await tester.pump();
 
-    // Vérifie que la tâche est marquée comme faite
-    final updatedTile = tester.widget<TaskTile>(
-      find.ancestor(
-        of: find.text('Devoir maison : Arbres B+ et indexation'),
-        matching: find.byType(TaskTile),
-      ),
-    );
-    expect(updatedTile.task.done, isTrue);
+    // Puisqu'on est sous le filtre "À faire", la tâche n'y est plus : le panneau revient à "Sélectionnez une tâche"
+    expect(find.text('Sélectionnez une tâche'), findsOneWidget);
+    expect(find.byType(TaskDetailView), findsNothing);
   });
 
   testWidgets('Navigation ShellRoute : bascule vers Cours puis Profil',

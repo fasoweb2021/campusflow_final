@@ -4,6 +4,7 @@ import 'package:campusflow_models/campusflow_models.dart';
 import 'package:go_router/go_router.dart';
 
 import 'data/sample_tasks.dart';
+import 'providers/filtres.dart';
 import 'providers/taches_notifier.dart';
 import 'widgets/task_detail_view.dart';
 import 'widgets/task_tile.dart';
@@ -29,23 +30,36 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
     context.push('/taches/nouvelle');
   }
 
+  String _getEmptyMessage(FiltreTaches filtre) {
+    switch (filtre) {
+      case FiltreTaches.aFaire:
+        return 'Aucune tâche à faire 🎉';
+      case FiltreTaches.faites:
+        return 'Aucune tâche terminée';
+      case FiltreTaches.enRetard:
+        return 'Aucune tâche en retard 🎉';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
-    // Lecture de la liste partagée des tâches via Riverpod
-    final tasks = ref.watch(tachesProvider);
+    // Lecture des providers Riverpod pour les filtres, tâches filtrées et compteurs
+    final filtre = ref.watch(filtreProvider);
+    final filteredTasks = ref.watch(tachesFiltreesProvider);
+    final compteurs = ref.watch(compteursProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final isExpanded = constraints.maxWidth >= kExpandedBreakpoint;
 
-        // Tâche sélectionnée en mode large
+        // Tâche sélectionnée en mode large (doit appartenir à la liste filtrée)
         Task? selectedTask;
         if (_selectedTaskId != null) {
-          for (final t in tasks) {
+          for (final t in filteredTasks) {
             if (t.id == _selectedTaskId) {
               selectedTask = t;
               break;
@@ -56,6 +70,84 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
         final selectedCourse = selectedTask?.courseId != null
             ? sampleCoursesMap[selectedTask!.courseId]
             : null;
+
+        Widget buildFilterSelector() {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SegmentedButton<FiltreTaches>(
+                segments: [
+                  ButtonSegment<FiltreTaches>(
+                    value: FiltreTaches.aFaire,
+                    label: Text(
+                      'À faire (${compteurs[FiltreTaches.aFaire] ?? 0})',
+                    ),
+                  ),
+                  ButtonSegment<FiltreTaches>(
+                    value: FiltreTaches.faites,
+                    label: Text(
+                      'Faites (${compteurs[FiltreTaches.faites] ?? 0})',
+                    ),
+                  ),
+                  ButtonSegment<FiltreTaches>(
+                    value: FiltreTaches.enRetard,
+                    label: Text(
+                      'En retard (${compteurs[FiltreTaches.enRetard] ?? 0})',
+                    ),
+                  ),
+                ],
+                selected: {filtre},
+                onSelectionChanged: (newSelection) {
+                  ref.read(filtreProvider.notifier).choisir(newSelection.first);
+                },
+              ),
+            ),
+          );
+        }
+
+        Widget buildTaskList() {
+          if (filteredTasks.isEmpty) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(
+                  _getEmptyMessage(filtre),
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            itemCount: filteredTasks.length,
+            itemBuilder: (context, index) {
+              final task = filteredTasks[index];
+              final course = task.courseId != null
+                  ? sampleCoursesMap[task.courseId]
+                  : null;
+
+              return TaskTile(
+                task: task,
+                course: course,
+                isSelected: task.id == _selectedTaskId,
+                onToggle: () =>
+                    ref.read(tachesProvider.notifier).basculer(task.id),
+                onTap: isExpanded
+                    ? () {
+                        setState(() {
+                          _selectedTaskId = task.id;
+                        });
+                      }
+                    : () => _openDetail(task),
+              );
+            },
+          );
+        }
 
         return Scaffold(
           appBar: AppBar(
@@ -74,33 +166,14 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Colonne gauche : liste des tâches (flex 2)
+                    // Colonne gauche : sélecteur de filtres + liste des tâches filtrées (flex 2)
                     Expanded(
                       flex: 2,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 8.0),
-                        itemCount: tasks.length,
-                        itemBuilder: (context, index) {
-                          final task = tasks[index];
-                          final course = task.courseId != null
-                              ? sampleCoursesMap[task.courseId]
-                              : null;
-
-                          return TaskTile(
-                            task: task,
-                            course: course,
-                            isSelected: task.id == _selectedTaskId,
-                            onToggle: () => ref
-                                .read(tachesProvider.notifier)
-                                .basculer(task.id),
-                            onTap: () {
-                              setState(() {
-                                _selectedTaskId = task.id;
-                              });
-                            },
-                          );
-                        },
+                      child: Column(
+                        children: [
+                          buildFilterSelector(),
+                          Expanded(child: buildTaskList()),
+                        ],
                       ),
                     ),
 
@@ -151,25 +224,11 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
                     ),
                   ],
                 )
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = tasks[index];
-                    final course = task.courseId != null
-                        ? sampleCoursesMap[task.courseId]
-                        : null;
-
-                    return TaskTile(
-                      task: task,
-                      course: course,
-                      onToggle: () => ref
-                          .read(tachesProvider.notifier)
-                          .basculer(task.id),
-                      onTap: () => _openDetail(task),
-                    );
-                  },
+              : Column(
+                  children: [
+                    buildFilterSelector(),
+                    Expanded(child: buildTaskList()),
+                  ],
                 ),
           floatingActionButton: isExpanded
               ? null
