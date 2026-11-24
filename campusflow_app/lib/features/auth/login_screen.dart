@@ -49,13 +49,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         if (!mounted) return;
         setState(() {
           _errorMessage = e.toString().replaceFirst('Exception: ', '');
+          _isLoading = false;
         });
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
       }
     }
   }
