@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../tasks/echeances_screen.dart';
+
 class TitleScreen extends StatelessWidget {
   const TitleScreen({super.key});
 
@@ -45,7 +47,14 @@ class TitleScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32.0),
                 FilledButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (context) => const EcheancesScreen(),
+                      ),
+                    );
+                  },
                   child: const Text('Commencer'),
                 ),
               ],
