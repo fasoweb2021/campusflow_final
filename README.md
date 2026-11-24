@@ -44,4 +44,16 @@ dart analyze
 dart test
 ```
 
+## Séance 7 — API simulée (`server`)
+
+Mise en place d'une API REST locale simulée avec `json-server@0.17.4` et `db.json`, exposant les ressources `/taches`, `/cours` et `/utilisateurs`.
+
+Commandes d'installation et de lancement du serveur :
+```bash
+cd server
+npm install
+npm run start:simple
+```
+
+
 

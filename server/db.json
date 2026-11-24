@@ -1,0 +1,98 @@
+{
+  "taches": [
+    {
+      "id": "t1",
+      "title": "Devoir maison : Arbres B+ et indexation",
+      "description": "Implémentation en C des opérations d'insertion et recherche",
+      "dueDate": "2026-11-21T23:59:00.000Z",
+      "done": false,
+      "courseId": "c1"
+    },
+    {
+      "id": "t2",
+      "title": "Rapport de TP : Architecture Flutter",
+      "description": "Analyse comparative du cycle de vie des widgets",
+      "dueDate": "2026-11-23T23:59:00.000Z",
+      "done": false,
+      "courseId": "c2"
+    },
+    {
+      "id": "t3",
+      "title": "Installation SDK Android & Émulateur Pixel",
+      "description": "Configuration sur disque D: et validation flutter doctor",
+      "dueDate": "2026-11-20T23:59:00.000Z",
+      "done": true,
+      "courseId": "c2"
+    },
+    {
+      "id": "t4",
+      "title": "Fiche de synthèse NoSQL vs SQL",
+      "description": "Comparaison des modèles relationnels et orientés documents",
+      "dueDate": "2026-11-25T23:59:00.000Z",
+      "done": true,
+      "courseId": "c3"
+    },
+    {
+      "id": "t5",
+      "title": "Projet Mobile : Écran Échéances avec ListView",
+      "description": "Création du widget TaskTile selon la variante C",
+      "dueDate": "2026-12-02T23:59:00.000Z",
+      "done": false,
+      "courseId": "c2"
+    },
+    {
+      "id": "t6",
+      "title": "Exercices sur les graphes et flot maximal",
+      "description": "Algorithme de Ford-Fulkerson et Edmonds-Karp",
+      "dueDate": "2026-12-05T23:59:00.000Z",
+      "done": false,
+      "courseId": "c1"
+    },
+    {
+      "id": "t7",
+      "title": "TP Noté : Réplication et consensus Raft",
+      "description": "Simulation de quorum sur environnement distribué",
+      "dueDate": "2026-12-10T23:59:00.000Z",
+      "done": false,
+      "courseId": "c3"
+    },
+    {
+      "id": "t8",
+      "title": "Préparation Examen Blanc d'Algorithmique",
+      "description": "Révision des annales de Master 1 des trois dernières années",
+      "dueDate": "2026-12-15T23:59:00.000Z",
+      "done": false,
+      "courseId": "c1"
+    }
+  ],
+  "cours": [
+    {
+      "id": "c1",
+      "name": "Algorithmique Avancée",
+      "teacher": "Dr. Koné",
+      "room": "Amphi A"
+    },
+    {
+      "id": "c2",
+      "name": "Programmation Mobile",
+      "teacher": "M. Traoré",
+      "room": "Labo 3"
+    },
+    {
+      "id": "c3",
+      "name": "Bases de Données Réparties",
+      "teacher": "Dr. Sawadogo",
+      "room": "Salle 12"
+    }
+  ],
+  "utilisateurs": [
+    {
+      "id": "u1",
+      "name": "Moussa Ouédraogo",
+      "email": "etudiant@campusflow.bf",
+      "password": "campus2026",
+      "program": "Licence 3 Informatique"
+    }
+  ]
+}
+
