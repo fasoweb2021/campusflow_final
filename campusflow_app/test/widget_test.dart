@@ -52,16 +52,16 @@ void main() {
     // Vérifie la présence des 8 tuiles
     expect(find.byType(TaskTile), findsNWidgets(8));
 
-    // La première tâche (t1) est initialement non cochée (done == false)
+    // Récupère l'état initial de la première case à cocher
     final firstCheckbox = tester.widget<Checkbox>(
       find.descendant(
         of: find.byType(TaskTile).first,
         matching: find.byType(Checkbox),
       ),
     );
-    expect(firstCheckbox.value, isFalse);
+    final initialValue = firstCheckbox.value!;
 
-    // Clic sur la première case à cocher pour la cocher
+    // Clic sur la première case à cocher pour basculer son état
     await tester.tap(
       find.descendant(
         of: find.byType(TaskTile).first,
@@ -70,13 +70,13 @@ void main() {
     );
     await tester.pump();
 
-    // Vérifie que l'état a basculé à true
+    // Vérifie que l'état a bien basculé
     final updatedCheckbox = tester.widget<Checkbox>(
       find.descendant(
         of: find.byType(TaskTile).first,
         matching: find.byType(Checkbox),
       ),
     );
-    expect(updatedCheckbox.value, isTrue);
+    expect(updatedCheckbox.value, equals(!initialValue));
   });
 }

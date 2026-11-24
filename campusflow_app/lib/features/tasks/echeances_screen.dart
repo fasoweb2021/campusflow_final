@@ -18,7 +18,7 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
   @override
   void initState() {
     super.initState();
-    _tasks = getSampleTasks();
+    _tasks = getSampleTasks()..sort((a, b) => a.dueDate.compareTo(b.dueDate));
   }
 
   void _toggleTask(String taskId) {
@@ -58,6 +58,7 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedNavigationIndex,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         onDestinationSelected: (index) {
           setState(() {
             _selectedNavigationIndex = index;

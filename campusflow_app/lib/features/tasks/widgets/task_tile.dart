@@ -6,12 +6,14 @@ class TaskTile extends StatelessWidget {
   final Task task;
   final Course? course;
   final VoidCallback? onToggle;
+  final VoidCallback? onTap;
 
   const TaskTile({
     super.key,
     required this.task,
     this.course,
     this.onToggle,
+    this.onTap,
   });
 
   @override
@@ -47,7 +49,7 @@ class TaskTile extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
-        onTap: onToggle,
+        onTap: onTap ?? onToggle,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           child: Row(
@@ -63,7 +65,7 @@ class TaskTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8.0),
-              // Contenu principal : Titre + Sous-titre
+              // Contenu principal : Titre + Cours (ligne 1) + Date et badge (ligne 2)
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,28 +81,18 @@ class TaskTile extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (course != null) ...[
+                      const SizedBox(height: 4.0),
+                      Text(
+                        course!.name,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 4.0),
                     Row(
                       children: [
-                        if (course != null) ...[
-                          Flexible(
-                            child: Text(
-                              course!.name,
-                              style: textTheme.bodySmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Text(
-                            '•',
-                            style: textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-                        ],
                         Text(
                           formattedDate,
                           style: textTheme.bodySmall?.copyWith(
