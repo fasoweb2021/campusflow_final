@@ -85,6 +85,30 @@ flutter analyze
 flutter test
 ```
 
+## Outils utilisés et démarche
+
+Ce projet a été réalisé avec l'aide d'outils d'intelligence artificielle :
+- **Agent Antigravity (Google)** : écriture du code et des documents, à
+  partir de consignes rédigées TP par TP ;
+- **Claude (Anthropic)** : assistant d'architecture (choix techniques,
+  fichiers AGENTS.md et docs/ARCHITECTURE.md, rédaction des consignes,
+  relecture des comptes rendus).
+
+Mon rôle :
+- installation et configuration de l'environnement (Flutter, Android SDK 36,
+  émulateur, Node.js) ;
+- décisions de conception (plateforme Android + Flutter, choix de la
+  variante C de l'écran Échéances) ;
+- vérification de chaque TP sur l'émulateur et tests manuels (CRUD, panne
+  du serveur, connexion, jeton expiré, déconnexion) ;
+- repérage des défauts et demandes de correction (libellés de navigation,
+  filtres coupés, chiffres non sourcés, cohérence du profil avec le persona) ;
+- captures d'écran et suivi du dépôt Git.
+
+Les fichiers AGENTS.md et docs/ARCHITECTURE.md sont les consignes données à
+l'agent ; ils sont laissés dans le dépôt par transparence.
+
+
 
 
 

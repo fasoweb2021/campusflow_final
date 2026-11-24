@@ -1,8 +1,32 @@
 # Récapitulatif du Projet CampusFlow — Rendu Final
 
 - **Étudiant** : KINDO Salifou
-- **Dépôt GitHub** : [https://github.com/fasoweb2021/campusflow_final](https://github.com/fasoweb2021/campusflow_final)
-- **Destinataire enseignant** : `moctar.compaore@gmail.com`
+- **Dépôt public** : https://github.com/fasoweb2021/campusflow_final
+
+---
+
+## Outils utilisés et démarche
+
+Ce projet a été réalisé avec l'aide d'outils d'intelligence artificielle :
+- **Agent Antigravity (Google)** : écriture du code et des documents, à
+  partir de consignes rédigées TP par TP ;
+- **Claude (Anthropic)** : assistant d'architecture (choix techniques,
+  fichiers AGENTS.md et docs/ARCHITECTURE.md, rédaction des consignes,
+  relecture des comptes rendus).
+
+Mon rôle :
+- installation et configuration de l'environnement (Flutter, Android SDK 36,
+  émulateur, Node.js) ;
+- décisions de conception (plateforme Android + Flutter, choix de la
+  variante C de l'écran Échéances) ;
+- vérification de chaque TP sur l'émulateur et tests manuels (CRUD, panne
+  du serveur, connexion, jeton expiré, déconnexion) ;
+- repérage des défauts et demandes de correction (libellés de navigation,
+  filtres coupés, chiffres non sourcés, cohérence du profil avec le persona) ;
+- captures d'écran et suivi du dépôt Git.
+
+Les fichiers AGENTS.md et docs/ARCHITECTURE.md sont les consignes données à
+l'agent ; ils sont laissés dans le dépôt par transparence.
 
 ---
 
@@ -72,6 +96,7 @@ Chaque point reprend fidèlement la liste d'auto-vérification de l'énoncé ave
 ---
 
 ### • Séance 3 : le package campusflow_models avec Task, Course, User, fromJson et 3 tests qui passent
+- **État des tests** : 3 tests requis — 7 tests réalisés, tous passent
 - **Fichiers concernés** :
   - [campusflow_models/lib/campusflow_models.dart](../campusflow_models/lib/campusflow_models.dart) (export principal)
   - [campusflow_models/lib/src/task.dart](../campusflow_models/lib/src/task.dart) (modèle immuable avec `isOverdue`, `copyWith`, `fromJson`, `toJson`)
@@ -116,7 +141,7 @@ Chaque point reprend fidèlement la liste d'auto-vérification de l'énoncé ave
   - [campusflow_app/lib/features/tasks/task_form_screen.dart](../campusflow_app/lib/features/tasks/task_form_screen.dart) (formulaire avec validation et date picker)
 - **Captures** :
   - [docs/captures/s5_telephone.png](captures/s5_telephone.png) (rendu sur téléphone)
-  - [docs/captures/s5_tablette.png](captures/s5_tablette.png) (rendu tablette master-detail split-view $\ge 840\text{ dp}$)
+  - [docs/captures/s5_tablette.png](captures/s5_tablette.png) (rendu tablette master-detail split-view ≥ 840 dp)
 - **Commits associés** :
   - `c7f520a` — `TP16 - Écran Échéances (ListView.builder, FAB, NavigationBar)`
   - `eeddb2c` — `TP16 - Libellés de navigation, tuile lisible et tri par date`
@@ -178,14 +203,13 @@ Chaque point reprend fidèlement la liste d'auto-vérification de l'énoncé ave
 ---
 
 ### • Le lien du dépôt GitHub est ouvert en lecture et envoyé à moctar.compaore@gmail.com
-- **Dépôt public** : [https://github.com/fasoweb2021/campusflow_final](https://github.com/fasoweb2021/campusflow_final)
-- **Accès enseignant** : vérifié accessible en navigation privée.
+- **Dépôt public** : https://github.com/fasoweb2021/campusflow_final
 
 ---
 
 ## Statistiques globales du projet
 
-- **Nombre total de commits** : 42 commits (dépassant l'exigence minimale de $\ge 27$).
+- **Nombre total de commits** : plus de 40 commits (dépassant l'exigence minimale de ≥ 27).
 - **Nombre total de tests automatisés** : 39 tests réussis à 100% :
   - `campusflow_models` : 7 tests unitaires (`dart test`).
   - `campusflow_app` : 32 tests unitaires et de widgets (`flutter test`).
