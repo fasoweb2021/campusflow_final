@@ -4,13 +4,14 @@ import 'package:go_router/go_router.dart';
 import '../features/auth/login_screen.dart';
 import '../features/courses/cours_screen.dart';
 import '../features/profile/profil_screen.dart';
-import '../features/tasks/data/sample_tasks.dart';
 import '../features/tasks/echeances_screen.dart';
 import '../features/tasks/task_detail_screen.dart';
 import '../features/tasks/task_form_screen.dart';
 import '../shell/app_shell.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
+
+final appRouter = createRouter();
 
 GoRouter createRouter({
   String initialLocation = '/login',
@@ -52,19 +53,18 @@ GoRouter createRouter({
       GoRoute(
         path: '/taches/nouvelle',
         parentNavigatorKey: rootKey,
-        builder: (context, state) => TaskFormScreen(courses: sampleCourses),
+        builder: (context, state) => const TaskFormScreen(),
       ),
       GoRoute(
         path: '/taches/:id',
         parentNavigatorKey: rootKey,
         builder: (context, state) {
-          final id = state.pathParameters['id'];
-          return TaskDetailScreen(taskId: id);
+          final taskId = state.pathParameters['id'];
+          return TaskDetailScreen(
+            taskId: taskId,
+          );
         },
       ),
     ],
   );
 }
-
-final GoRouter appRouter = createRouter();
-

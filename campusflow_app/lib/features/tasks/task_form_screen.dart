@@ -4,15 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 
-import 'data/sample_tasks.dart';
 import 'providers/taches_notifier.dart';
 
 class TaskFormScreen extends ConsumerStatefulWidget {
-  final List<Course> courses;
+  final List<Course>? courses;
 
   const TaskFormScreen({
     super.key,
-    this.courses = sampleCourses,
+    this.courses,
   });
 
   @override
@@ -26,6 +25,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
   String? _selectedCourseId;
   late DateTime _selectedDate;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -56,10 +56,12 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     }
   }
 
-  void _submit() {
+  Future<void> _submit() async {
+    if (_isSubmitting) return;
+
     if (_formKey.currentState!.validate()) {
       final newTask = Task(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: '', // Le serveur attribue l'identifiant
         title: _titleController.text.trim(),
         description: _descriptionController.text.trim().isEmpty
             ? null
@@ -75,20 +77,39 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
         courseId: _selectedCourseId,
       );
 
-      // Ajout de la tâche via Riverpod
-      ref.read(tachesProvider.notifier).ajouter(newTask);
+      setState(() {
+        _isSubmitting = true;
+      });
 
-      // Affichage du SnackBar avant de fermer l'écran
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tâche ajoutée'),
-        ),
-      );
+      try {
+        await ref.read(tachesProvider.notifier).ajouter(newTask);
+        if (!mounted) return;
 
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/taches');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Tâche ajoutée'),
+          ),
+        );
+
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/taches');
+        }
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur lors de l\'ajout : $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isSubmitting = false;
+          });
+        }
       }
     }
   }
@@ -101,10 +122,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
     final formattedDate =
         DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(_selectedDate);
 
-    // Si courses n'a pas été passé explicitement, utilise coursProvider
-    final courses = ref.watch(coursProvider);
-    final effectiveCourses =
-        widget.courses.isNotEmpty ? widget.courses : courses;
+    final List<Course> courses = widget.courses ?? ref.watch(coursProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -121,6 +139,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 // Champ Titre
                 TextFormField(
                   controller: _titleController,
+                  enabled: !_isSubmitting,
                   decoration: const InputDecoration(
                     labelText: 'Titre *',
                     hintText: 'Ex : Rendu de projet Flutter',
@@ -137,6 +156,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                 // Champ Description (multiligne facultatif)
                 TextFormField(
                   controller: _descriptionController,
+                  enabled: !_isSubmitting,
                   maxLines: 3,
                   decoration: const InputDecoration(
                     labelText: 'Description',
@@ -151,17 +171,19 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Cours *',
                   ),
-                  items: effectiveCourses.map((course) {
+                  items: courses.map((course) {
                     return DropdownMenuItem<String>(
                       value: course.id,
                       child: Text(course.name),
                     );
                   }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCourseId = value;
-                    });
-                  },
+                  onChanged: _isSubmitting
+                      ? null
+                      : (value) {
+                          setState(() {
+                            _selectedCourseId = value;
+                          });
+                        },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez sélectionner un cours';
@@ -173,7 +195,7 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
                 // Choix de la date d'échéance
                 InkWell(
-                  onTap: _pickDate,
+                  onTap: _isSubmitting ? null : _pickDate,
                   borderRadius: BorderRadius.circular(12.0),
                   child: InputDecorator(
                     decoration: const InputDecoration(
@@ -190,11 +212,19 @@ class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
 
                 // Bouton Enregistrer
                 FilledButton(
-                  onPressed: _submit,
-                  child: Text(
-                    'Enregistrer',
-                    style: TextStyle(color: colorScheme.onPrimary),
-                  ),
+                  onPressed: _isSubmitting ? null : _submit,
+                  child: _isSubmitting
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                          ),
+                        )
+                      : Text(
+                          'Enregistrer',
+                          style: TextStyle(color: colorScheme.onPrimary),
+                        ),
                 ),
               ],
             ),

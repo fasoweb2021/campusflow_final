@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:campusflow_app/app.dart';
+import 'package:campusflow_app/data/fake_task_repository.dart';
+import 'package:campusflow_app/data/task_repository.dart';
 import 'package:campusflow_app/features/courses/cours_screen.dart';
 import 'package:campusflow_app/features/profile/profil_screen.dart';
 import 'package:campusflow_app/features/tasks/providers/filtres.dart';
@@ -13,10 +15,30 @@ import 'package:campusflow_app/features/tasks/widgets/task_detail_view.dart';
 import 'package:campusflow_app/features/tasks/widgets/task_tile.dart';
 import 'package:campusflow_app/router/app_router.dart';
 
+import 'failing_task_repository.dart';
+
 void main() {
   setUpAll(() async {
     await initializeDateFormatting('fr_FR');
   });
+
+  Widget createTestApp({
+    String initialLocation = '/taches',
+    TaskRepository? repository,
+  }) {
+    final repo = repository ?? FakeTaskRepository(delay: Duration.zero);
+    return ProviderScope(
+      overrides: [
+        taskRepositoryProvider.overrideWithValue(repo),
+      ],
+      child: CampusFlowApp(
+        routerConfig: createRouter(
+          initialLocation: initialLocation,
+          navigatorKey: GlobalKey<NavigatorState>(),
+        ),
+      ),
+    );
+  }
 
   testWidgets('Écran /login s\'affiche et "Entrer" mène à Échéances',
       (WidgetTester tester) async {
@@ -25,14 +47,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/login',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/login'),
     );
     await tester.pumpAndSettle();
 
@@ -61,14 +76,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches/inconnu',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches/inconnu'),
     );
     await tester.pumpAndSettle();
 
@@ -91,14 +99,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -123,14 +124,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -163,14 +157,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -226,12 +213,14 @@ void main() {
       navigatorKey: GlobalKey<NavigatorState>(),
     );
 
-    // Navigation initiale sur /taches
     await tester.pumpWidget(
       ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: router,
-        ),
+        overrides: [
+          taskRepositoryProvider.overrideWithValue(
+            FakeTaskRepository(delay: Duration.zero),
+          ),
+        ],
+        child: CampusFlowApp(routerConfig: router),
       ),
     );
     await tester.pumpAndSettle();
@@ -275,14 +264,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches/nouvelle',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches/nouvelle'),
     );
     await tester.pumpAndSettle();
 
@@ -303,14 +285,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -325,7 +300,7 @@ void main() {
     // Saisie du Titre
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Titre *'),
-      'Nouveau devoir TP23 Riverpod',
+      'Nouveau devoir TP26 AsyncNotifier',
     );
 
     // Sélection du Cours
@@ -339,10 +314,10 @@ void main() {
     await tester.tap(find.text('Enregistrer'));
     await tester.pumpAndSettle();
 
-    // Vérifie le retour sur la liste avec 7 tuiles (6 + 1 non faite) et le SnackBar
+    // Vérifie le retour sur la liste avec 7 tuiles et le SnackBar
     expect(find.text('Échéances'), findsWidgets);
     expect(find.byType(TaskTile), findsNWidgets(7));
-    expect(find.text('Nouveau devoir TP23 Riverpod'), findsOneWidget);
+    expect(find.text('Nouveau devoir TP26 AsyncNotifier'), findsOneWidget);
     expect(find.text('Tâche ajoutée'), findsOneWidget);
   });
 
@@ -354,14 +329,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -374,7 +342,7 @@ void main() {
 
     // Tap sur une tâche non faite (ex: "Devoir maison : Arbres B+ et indexation")
     await tester.tap(find.text('Devoir maison : Arbres B+ et indexation'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Le détail s'affiche
     expect(find.text('Sélectionnez une tâche'), findsNothing);
@@ -383,7 +351,7 @@ void main() {
 
     // Clic sur "Marquer comme fait" -> la tâche devient faite
     await tester.tap(find.text('Marquer comme fait'));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Puisqu'on est sous le filtre "À faire", la tâche n'y est plus : le panneau revient à "Sélectionnez une tâche"
     expect(find.text('Sélectionnez une tâche'), findsOneWidget);
@@ -397,14 +365,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -432,14 +393,7 @@ void main() {
     addTearDown(() => tester.view.resetPhysicalSize());
 
     await tester.pumpWidget(
-      ProviderScope(
-        child: CampusFlowApp(
-          routerConfig: createRouter(
-            initialLocation: '/taches',
-            navigatorKey: GlobalKey<NavigatorState>(),
-          ),
-        ),
-      ),
+      createTestApp(initialLocation: '/taches'),
     );
     await tester.pumpAndSettle();
 
@@ -464,5 +418,104 @@ void main() {
       find.descendant(of: navBarFinder, matching: find.text('Profil')),
       findsOneWidget,
     );
+  });
+
+  testWidgets(
+      'FailingTaskRepository : l\'écran affiche le message d\'erreur et le bouton Réessayer',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      createTestApp(
+        initialLocation: '/taches',
+        repository: const FailingTaskRepository(
+          errorMessage: 'Erreur réseau simulée CampusFlow',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Vérifie le message d'erreur en français et le bouton Réessayer
+    expect(find.text('Erreur réseau simulée CampusFlow'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Réessayer'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Suppression par glissement Dismissible : dialogue de confirmation puis suppression',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    await tester.pumpWidget(
+      createTestApp(initialLocation: '/taches'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TaskTile), findsNWidgets(6));
+
+    // Glissement vers la gauche sur la première tâche
+    await tester.drag(find.byType(TaskTile).first, const Offset(-500.0, 0.0));
+    await tester.pumpAndSettle();
+
+    // Boîte de dialogue de confirmation
+    expect(find.text('Confirmation'), findsOneWidget);
+    expect(find.text('Supprimer cette tâche ?'), findsOneWidget);
+
+    // Clic sur Supprimer
+    await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+    await tester.pumpAndSettle();
+
+    // La tâche est supprimée (reste 5) et le SnackBar s'affiche
+    expect(find.byType(TaskTile), findsNWidgets(5));
+    expect(find.text('Tâche supprimée'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Suppression depuis l\'AppBar de TaskDetailScreen : confirmation puis suppression et retour',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    final router = createRouter(
+      initialLocation: '/taches',
+      navigatorKey: GlobalKey<NavigatorState>(),
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          taskRepositoryProvider.overrideWithValue(
+            FakeTaskRepository(delay: Duration.zero),
+          ),
+        ],
+        child: CampusFlowApp(routerConfig: router),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Aller sur le détail de t1
+    router.push('/taches/t1');
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TaskDetailScreen), findsOneWidget);
+
+    // Clic sur l'icône poubelle dans l'AppBar
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+
+    // Confirmation
+    expect(find.text('Confirmation'), findsOneWidget);
+    expect(find.text('Supprimer cette tâche ?'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'Supprimer'));
+    await tester.pumpAndSettle();
+
+    // Retour sur Échéances et SnackBar affiché
+    expect(find.text('Échéances'), findsWidgets);
+    expect(find.text('Tâche supprimée'), findsOneWidget);
   });
 }

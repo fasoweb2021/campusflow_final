@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 import 'package:go_router/go_router.dart';
 
-import 'data/sample_tasks.dart';
 import 'providers/filtres.dart';
 import 'providers/taches_notifier.dart';
 import 'widgets/task_detail_view.dart';
@@ -41,16 +40,41 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
     }
   }
 
+  Future<void> _handleDeleteTask(BuildContext context, Task task) async {
+    try {
+      await ref.read(tachesProvider.notifier).supprimer(task.id);
+      if (_selectedTaskId == task.id) {
+        setState(() {
+          _selectedTaskId = null;
+        });
+      }
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tâche supprimée')),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur lors de la suppression : $e'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
-    // Lecture des providers Riverpod pour les filtres, tâches filtrées et compteurs
+    // Lecture des providers Riverpod pour les filtres, tâches et compteurs
     final filtre = ref.watch(filtreProvider);
-    final filteredTasks = ref.watch(tachesFiltreesProvider);
+    final asyncFilteredTasks = ref.watch(tachesFiltreesProvider);
     final compteurs = ref.watch(compteursProvider);
+    final courses = ref.watch(coursProvider);
+    final coursesMap = {for (final c in courses) c.id: c};
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -58,8 +82,9 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
 
         // Tâche sélectionnée en mode large (doit appartenir à la liste filtrée)
         Task? selectedTask;
+        final currentFilteredList = asyncFilteredTasks.value ?? [];
         if (_selectedTaskId != null) {
-          for (final t in filteredTasks) {
+          for (final t in currentFilteredList) {
             if (t.id == _selectedTaskId) {
               selectedTask = t;
               break;
@@ -68,12 +93,13 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
         }
 
         final selectedCourse = selectedTask?.courseId != null
-            ? sampleCoursesMap[selectedTask!.courseId]
+            ? coursesMap[selectedTask!.courseId]
             : null;
 
         Widget buildFilterSelector() {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: SizedBox(
               width: double.infinity,
               child: SegmentedButton<FiltreTaches>(
@@ -121,43 +147,147 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
         }
 
         Widget buildTaskList() {
-          if (filteredTasks.isEmpty) {
-            return Center(
+          return asyncFilteredTasks.when(
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (err, stack) => Center(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: Text(
-                  _getEmptyMessage(filtre),
-                  style: textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      size: 48.0,
+                      color: colorScheme.error,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      err.toString().replaceFirst('Exception: ', ''),
+                      style: textTheme.bodyLarge?.copyWith(
+                        color: colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16.0),
+                    FilledButton.icon(
+                      onPressed: () => ref.invalidate(tachesProvider),
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Réessayer'),
+                    ),
+                  ],
                 ),
               ),
-            );
-          }
+            ),
+            data: (tasks) {
+              return RefreshIndicator(
+                onRefresh: () => ref.refresh(tachesProvider.future),
+                child: tasks.isEmpty
+                    ? LayoutBuilder(
+                        builder: (context, viewport) => SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: viewport.maxHeight,
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: Text(
+                                  _getEmptyMessage(filtre),
+                                  style: textTheme.bodyLarge?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        itemCount: tasks.length,
+                        itemBuilder: (context, index) {
+                          final task = tasks[index];
+                          final course = task.courseId != null
+                              ? coursesMap[task.courseId]
+                              : null;
 
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            itemCount: filteredTasks.length,
-            itemBuilder: (context, index) {
-              final task = filteredTasks[index];
-              final course = task.courseId != null
-                  ? sampleCoursesMap[task.courseId]
-                  : null;
-
-              return TaskTile(
-                task: task,
-                course: course,
-                isSelected: task.id == _selectedTaskId,
-                onToggle: () =>
-                    ref.read(tachesProvider.notifier).basculer(task.id),
-                onTap: isExpanded
-                    ? () {
-                        setState(() {
-                          _selectedTaskId = task.id;
-                        });
-                      }
-                    : () => _openDetail(task),
+                          return Dismissible(
+                            key: Key(task.id),
+                            direction: DismissDirection.endToStart,
+                            background: Container(
+                              alignment: Alignment.centerRight,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                              ),
+                              color: colorScheme.errorContainer,
+                              child: Icon(
+                                Icons.delete_outline,
+                                color: colorScheme.onErrorContainer,
+                              ),
+                            ),
+                            confirmDismiss: (direction) async {
+                              return await showDialog<bool>(
+                                context: context,
+                                builder: (dialogContext) => AlertDialog(
+                                  title: const Text('Confirmation'),
+                                  content:
+                                      const Text('Supprimer cette tâche ?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(false),
+                                      child: const Text('Annuler'),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(true),
+                                      child: const Text('Supprimer'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            onDismissed: (direction) {
+                              _handleDeleteTask(context, task);
+                            },
+                            child: TaskTile(
+                              task: task,
+                              course: course,
+                              isSelected: task.id == _selectedTaskId,
+                              onToggle: () async {
+                                try {
+                                  await ref
+                                      .read(tachesProvider.notifier)
+                                      .basculer(task.id);
+                                } catch (e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Erreur : $e'),
+                                      backgroundColor: colorScheme.error,
+                                    ),
+                                  );
+                                }
+                              },
+                              onTap: isExpanded
+                                  ? () {
+                                      setState(() {
+                                        _selectedTaskId = task.id;
+                                      });
+                                    }
+                                  : () => _openDetail(task),
+                            ),
+                          );
+                        },
+                      ),
               );
             },
           );
@@ -227,9 +357,25 @@ class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
                                   FilledButton(
                                     onPressed: selectedTask.done
                                         ? null
-                                        : () => ref
-                                            .read(tachesProvider.notifier)
-                                            .basculer(selectedTask!.id),
+                                        : () async {
+                                            try {
+                                              await ref
+                                                  .read(
+                                                      tachesProvider.notifier)
+                                                  .basculer(selectedTask!.id);
+                                            } catch (e) {
+                                              if (!context.mounted) return;
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content:
+                                                      Text('Erreur : $e'),
+                                                  backgroundColor:
+                                                      colorScheme.error,
+                                                ),
+                                              );
+                                            }
+                                          },
                                     child: const Text('Marquer comme fait'),
                                   ),
                                 ],

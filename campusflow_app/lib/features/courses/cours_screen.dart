@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../tasks/data/sample_tasks.dart';
+import '../tasks/providers/taches_notifier.dart';
 
-class CoursScreen extends StatelessWidget {
+class CoursScreen extends ConsumerWidget {
   const CoursScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final colorScheme = theme.colorScheme;
+    final courses = ref.watch(coursProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -17,9 +19,9 @@ class CoursScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        itemCount: sampleCourses.length,
+        itemCount: courses.length,
         itemBuilder: (context, index) {
-          final course = sampleCourses[index];
+          final course = courses[index];
           return Card(
             margin: const EdgeInsets.only(bottom: 12.0),
             child: ListTile(
@@ -82,4 +84,3 @@ class CoursScreen extends StatelessWidget {
     );
   }
 }
-
