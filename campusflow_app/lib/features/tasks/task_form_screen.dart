@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 
-class TaskFormScreen extends StatefulWidget {
+import 'data/sample_tasks.dart';
+import 'providers/taches_notifier.dart';
+
+class TaskFormScreen extends ConsumerStatefulWidget {
   final List<Course> courses;
 
   const TaskFormScreen({
     super.key,
-    required this.courses,
+    this.courses = sampleCourses,
   });
 
   @override
-  State<TaskFormScreen> createState() => _TaskFormScreenState();
+  ConsumerState<TaskFormScreen> createState() => _TaskFormScreenState();
 }
 
-class _TaskFormScreenState extends State<TaskFormScreen> {
+class _TaskFormScreenState extends ConsumerState<TaskFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -71,7 +75,21 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
         courseId: _selectedCourseId,
       );
 
-      context.pop(newTask);
+      // Ajout de la tâche via Riverpod
+      ref.read(tachesProvider.notifier).ajouter(newTask);
+
+      // Affichage du SnackBar avant de fermer l'écran
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Tâche ajoutée'),
+        ),
+      );
+
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go('/taches');
+      }
     }
   }
 
@@ -82,6 +100,11 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
     final colorScheme = theme.colorScheme;
     final formattedDate =
         DateFormat('EEEE d MMMM yyyy', 'fr_FR').format(_selectedDate);
+
+    // Si courses n'a pas été passé explicitement, utilise coursProvider
+    final courses = ref.watch(coursProvider);
+    final effectiveCourses =
+        widget.courses.isNotEmpty ? widget.courses : courses;
 
     return Scaffold(
       appBar: AppBar(
@@ -128,7 +151,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Cours *',
                   ),
-                  items: widget.courses.map((course) {
+                  items: effectiveCourses.map((course) {
                     return DropdownMenuItem<String>(
                       value: course.id,
                       child: Text(course.name),

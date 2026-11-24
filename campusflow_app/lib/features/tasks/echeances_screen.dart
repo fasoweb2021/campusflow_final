@@ -1,80 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 import 'package:go_router/go_router.dart';
 
 import 'data/sample_tasks.dart';
+import 'providers/taches_notifier.dart';
 import 'widgets/task_detail_view.dart';
 import 'widgets/task_tile.dart';
 
 /// Seuil de largeur responsive (en dp) pour la mise en page adaptative tablette
 const double kExpandedBreakpoint = 840.0;
 
-class EcheancesScreen extends StatefulWidget {
+class EcheancesScreen extends ConsumerStatefulWidget {
   const EcheancesScreen({super.key});
 
   @override
-  State<EcheancesScreen> createState() => _EcheancesScreenState();
+  ConsumerState<EcheancesScreen> createState() => _EcheancesScreenState();
 }
 
-class _EcheancesScreenState extends State<EcheancesScreen> {
-  late List<Task> _tasks;
+class _EcheancesScreenState extends ConsumerState<EcheancesScreen> {
   String? _selectedTaskId;
 
-  @override
-  void initState() {
-    super.initState();
-    _tasks = getSampleTasks()..sort((a, b) => a.dueDate.compareTo(b.dueDate));
+  void _openDetail(Task task) {
+    context.push('/taches/${task.id}');
   }
 
-  void _toggleTask(String taskId) {
-    setState(() {
-      _tasks = [
-        for (final task in _tasks)
-          if (task.id == taskId) task.copyWith(done: !task.done) else task,
-      ];
-    });
-  }
-
-  void _markTaskDone(String taskId) {
-    setState(() {
-      _tasks = [
-        for (final task in _tasks)
-          if (task.id == taskId) task.copyWith(done: true) else task,
-      ];
-    });
-  }
-
-  Future<void> _openDetail(Task task) async {
-    final updatedTask = await context.push<Task>('/taches/${task.id}');
-
-    if (updatedTask != null) {
-      setState(() {
-        _tasks = [
-          for (final t in _tasks)
-            if (t.id == updatedTask.id) updatedTask else t,
-        ];
-        _tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-      });
-    }
-  }
-
-  Future<void> _openAddTaskForm() async {
-    final newTask = await context.push<Task>('/taches/nouvelle');
-
-    if (newTask != null) {
-      setState(() {
-        _tasks = [..._tasks, newTask];
-        _tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
-        _selectedTaskId = newTask.id;
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Tâche ajoutée'),
-          ),
-        );
-      }
-    }
+  void _openAddTaskForm() {
+    context.push('/taches/nouvelle');
   }
 
   @override
@@ -83,6 +35,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
+    // Lecture de la liste partagée des tâches via Riverpod
+    final tasks = ref.watch(tachesProvider);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isExpanded = constraints.maxWidth >= kExpandedBreakpoint;
@@ -90,7 +45,7 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
         // Tâche sélectionnée en mode large
         Task? selectedTask;
         if (_selectedTaskId != null) {
-          for (final t in _tasks) {
+          for (final t in tasks) {
             if (t.id == _selectedTaskId) {
               selectedTask = t;
               break;
@@ -125,9 +80,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
                       child: ListView.builder(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
-                        itemCount: _tasks.length,
+                        itemCount: tasks.length,
                         itemBuilder: (context, index) {
-                          final task = _tasks[index];
+                          final task = tasks[index];
                           final course = task.courseId != null
                               ? sampleCoursesMap[task.courseId]
                               : null;
@@ -136,7 +91,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
                             task: task,
                             course: course,
                             isSelected: task.id == _selectedTaskId,
-                            onToggle: () => _toggleTask(task.id),
+                            onToggle: () => ref
+                                .read(tachesProvider.notifier)
+                                .basculer(task.id),
                             onTap: () {
                               setState(() {
                                 _selectedTaskId = task.id;
@@ -183,8 +140,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
                                   FilledButton(
                                     onPressed: selectedTask.done
                                         ? null
-                                        : () =>
-                                            _markTaskDone(selectedTask!.id),
+                                        : () => ref
+                                            .read(tachesProvider.notifier)
+                                            .basculer(selectedTask!.id),
                                     child: const Text('Marquer comme fait'),
                                   ),
                                 ],
@@ -196,9 +154,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
               : ListView.builder(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 16.0, vertical: 8.0),
-                  itemCount: _tasks.length,
+                  itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    final task = _tasks[index];
+                    final task = tasks[index];
                     final course = task.courseId != null
                         ? sampleCoursesMap[task.courseId]
                         : null;
@@ -206,7 +164,9 @@ class _EcheancesScreenState extends State<EcheancesScreen> {
                     return TaskTile(
                       task: task,
                       course: course,
-                      onToggle: () => _toggleTask(task.id),
+                      onToggle: () => ref
+                          .read(tachesProvider.notifier)
+                          .basculer(task.id),
                       onTap: () => _openDetail(task),
                     );
                   },

@@ -182,6 +182,54 @@ void main() {
     expect(checkbox.value, isTrue);
   });
 
+  testWidgets(
+      'Marquer une tâche comme faite depuis /taches/:id puis revenir sur /taches -> la case est cochée',
+      (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(800, 1200);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() => tester.view.resetPhysicalSize());
+
+    final router = createRouter(
+      initialLocation: '/taches',
+      navigatorKey: GlobalKey<NavigatorState>(),
+    );
+
+    // Navigation initiale sur /taches
+    await tester.pumpWidget(
+      ProviderScope(
+        child: CampusFlowApp(
+          routerConfig: router,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Navigation vers l'échéance t1 via son URL
+    router.push('/taches/t1');
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TaskDetailScreen), findsOneWidget);
+    expect(find.text('Devoir maison : Arbres B+ et indexation'), findsOneWidget);
+
+    // Clic sur "Marquer comme fait"
+    await tester.tap(find.text('Marquer comme fait'));
+    await tester.pumpAndSettle();
+
+    // L'écran revient sur /taches avec la liste
+    expect(find.text('Échéances'), findsWidgets);
+    final taskTileFinder = find.ancestor(
+      of: find.text('Devoir maison : Arbres B+ et indexation'),
+      matching: find.byType(TaskTile),
+    );
+    final checkbox = tester.widget<Checkbox>(
+      find.descendant(
+        of: taskTileFinder,
+        matching: find.byType(Checkbox),
+      ),
+    );
+    expect(checkbox.value, isTrue);
+  });
+
   testWidgets('Formulaire affiche une erreur si le titre est vide',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(800, 1200);
@@ -239,7 +287,7 @@ void main() {
     // Saisie du Titre
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Titre *'),
-      'Nouveau devoir TP21',
+      'Nouveau devoir TP22 Riverpod',
     );
 
     // Sélection du Cours
@@ -256,7 +304,7 @@ void main() {
     // Vérifie le retour sur la liste avec 9 tuiles et le SnackBar
     expect(find.text('Échéances'), findsWidgets);
     expect(find.byType(TaskTile), findsNWidgets(9));
-    expect(find.text('Nouveau devoir TP21'), findsOneWidget);
+    expect(find.text('Nouveau devoir TP22 Riverpod'), findsOneWidget);
     expect(find.text('Tâche ajoutée'), findsOneWidget);
   });
 

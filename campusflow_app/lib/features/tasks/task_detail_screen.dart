@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:campusflow_models/campusflow_models.dart';
 import 'package:go_router/go_router.dart';
 
 import 'data/sample_tasks.dart';
+import 'providers/taches_notifier.dart';
 import 'widgets/task_detail_view.dart';
 
-class TaskDetailScreen extends StatelessWidget {
+class TaskDetailScreen extends ConsumerWidget {
   final String? taskId;
   final Task? task;
   final List<Course> courses;
@@ -18,10 +20,13 @@ class TaskDetailScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Lecture de la liste des tâches depuis le provider Riverpod
+    final tasks = ref.watch(tachesProvider);
+
     Task? effectiveTask = task;
     if (effectiveTask == null && taskId != null) {
-      for (final t in sampleTasks) {
+      for (final t in tasks) {
         if (t.id == taskId) {
           effectiveTask = t;
           break;
@@ -96,7 +101,14 @@ class TaskDetailScreen extends StatelessWidget {
                 onPressed: effectiveTask.done
                     ? null
                     : () {
-                        context.pop(effectiveTask!.copyWith(done: true));
+                        ref
+                            .read(tachesProvider.notifier)
+                            .basculer(effectiveTask!.id);
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/taches');
+                        }
                       },
                 child: const Text('Marquer comme fait'),
               ),
